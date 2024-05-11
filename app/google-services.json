@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "797132368546",
+    "project_id": "androidprogrammingprojec-805a4",
+    "storage_bucket": "androidprogrammingprojec-805a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797132368546:android:0e2f0f02d0beb26a0b05fb",
+        "android_client_info": {
+          "package_name": "hansung.ac.kr.androidprogrammingproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB10Uz9YB_Wgi3XXKA6YXFGPJsEutAwGpQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
