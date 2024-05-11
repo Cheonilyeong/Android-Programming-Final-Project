@@ -17,6 +17,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    gradle
+
+
 
     buildTypes {
         release {
@@ -31,15 +34,24 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    // 뷰 바인딩
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
 
+    // Firebase 의존성 추가
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.database)
+    // RecyclerView 의존성 추가
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    // BottomNavigation 의존성 추가
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
