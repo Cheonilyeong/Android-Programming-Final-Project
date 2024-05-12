@@ -3,8 +3,8 @@ package hansung.ac.kr.androidprogrammingproject;
 public class UserAccount {
 
     private String idToken;     // firebase의 토큰 (Uid)
-    private String email;
-    private String password;
+    private String email;       // 이메일 ID
+    private String password;    // 비밀번호
 
     public UserAccount() { }
 

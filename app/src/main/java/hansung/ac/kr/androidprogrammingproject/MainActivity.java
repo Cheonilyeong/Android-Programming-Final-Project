@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 첫번째 프레그먼트 띄우기
         getSupportFragmentManager().beginTransaction().add(R.id.frame_container,new HomeFragment()).commit();
-
+        // BottomNavigationView Fragment 전환
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

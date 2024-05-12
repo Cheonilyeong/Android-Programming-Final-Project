@@ -17,8 +17,8 @@ import hansung.ac.kr.androidprogrammingproject.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView recyclerView;      
+    private RecyclerView.Adapter mAdapter;  
     private RecyclerView.LayoutManager layoutManager;
 
     private FragmentHomeBinding binding;
@@ -27,7 +27,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 //        // 나머지 데이터 추가...
 //        myDataset.add(new DataModel("이미지1","텍스트1","텍스트1"));
@@ -48,7 +47,7 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
-
+        // HomeFragment 바인딩
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 

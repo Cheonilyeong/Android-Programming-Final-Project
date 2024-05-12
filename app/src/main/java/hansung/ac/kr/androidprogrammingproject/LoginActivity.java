@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseRef = FirebaseDatabase.getInstance().getReference("project");
 
-        // 이메일, 패스워드 에디트텍스트
+        // 이메일, 패스워드
         etEmail = findViewById(R.id.et_email);
         etPwd = findViewById(R.id.et_pwd);
 
@@ -50,11 +50,13 @@ public class LoginActivity extends AppCompatActivity {
                 firebaseAuth.signInWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        // 로그인 성공
                         if(task.isSuccessful()) {
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();   // 현재 엑티비티 삭제
                         }
+                        // 로그인 실패
                         else {
                             Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                         }
@@ -62,13 +64,12 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
         });
-        // 회원가입 버튼
+        // 회원가입 창 이동 버튼
         btnRegister = findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });

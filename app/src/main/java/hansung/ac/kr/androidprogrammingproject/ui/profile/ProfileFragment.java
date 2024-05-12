@@ -22,19 +22,21 @@ import hansung.ac.kr.androidprogrammingproject.databinding.FragmentProfileBindin
 
 public class ProfileFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;      // 파이어베이스 인증처리
     private FragmentProfileBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ProfileViewModel mypageViewModel =
+        // ?
+        ProfileViewModel profileViewModel =
                 new ViewModelProvider(this).get(ProfileViewModel.class);
-
+        // ProfileFragment 바인딩
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        // 로그아웃 버튼
         Button btnLogout = root.findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override

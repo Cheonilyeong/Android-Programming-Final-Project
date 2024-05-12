@@ -23,8 +23,8 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
     private DatabaseReference databaseRef; // 실시간 데이터베이스
 
-    private EditText etEmail, etPwd;
-    private Button btnRegister;
+    private EditText etEmail, etPwd;        // ID and PWD
+    private Button btnRegister;             // 회원 가입 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,12 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseRef = FirebaseDatabase.getInstance().getReference("project");
 
+        // 이메일, 패스워드
         etEmail = findViewById(R.id.et_email);
         etPwd = findViewById(R.id.et_pwd);
-        btnRegister = findViewById(R.id.btn_register);
 
+        // 회원가입 버튼
+        btnRegister = findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
                 firebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        // 회원가입 성공
                         if(task.isSuccessful()) {
                             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                             // 유저 객체 만들기
@@ -60,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             Toast.makeText(RegisterActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
                         }
+                        // 회원가입 실패
                         else {
                             // 오류 메시지 출력
                             // 비밀번호가 6글자 아래면 오류가 뜨더라

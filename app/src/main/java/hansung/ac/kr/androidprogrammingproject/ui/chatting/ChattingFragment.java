@@ -20,7 +20,7 @@ public class ChattingFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         ChattingViewModel chattingViewModel =
                 new ViewModelProvider(this).get(ChattingViewModel.class);
-
+        // ChattingFragment 바인딩
         binding = FragmentChattingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
