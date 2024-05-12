@@ -31,8 +31,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
-
         </activity>
+        <!-- modificationActivity -->
+        <activity
+            android:name=".ModificationActivity"
+            android:exported="false" />
+        <!-- mainActivity -->
     </application>
 
 </manifest>

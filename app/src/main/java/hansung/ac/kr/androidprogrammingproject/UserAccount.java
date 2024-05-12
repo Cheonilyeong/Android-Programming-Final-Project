@@ -5,6 +5,8 @@ public class UserAccount {
     private String idToken;     // firebase의 토큰 (Uid)
     private String email;       // 이메일 ID
     private String password;    // 비밀번호
+    private String nickname;    // 별명
+    private String information; // 한 줄 소개
 
     public UserAccount() { }
 
@@ -14,4 +16,9 @@ public class UserAccount {
     public void setEmail(String email) { this.email = email;}
     public String getPassword(){ return password;}
     public void setPassword(String password) { this.password = password;}
+    public String getNickName() { return nickname; };
+    public void setNickName(String nickname) { this.nickname = nickname; }
+    public String getInformation() { return information; }
+    public void setInformation(String information) { this.information = information; }
+
 }
