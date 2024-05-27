@@ -45,9 +45,18 @@ dependencies {
     // Firebase 의존성 추가
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    // Add the dependency for the Cloud Storage library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-storage")
     // RecyclerView 의존성 추가
     implementation("androidx.recyclerview:recyclerview:1.2.1")
-    // BottomNavigation 의존성 추가
+    // CircleImageView 의존성 추가
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    // Glide 의존성 추가
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
 
     implementation(libs.appcompat)
     implementation(libs.material)
