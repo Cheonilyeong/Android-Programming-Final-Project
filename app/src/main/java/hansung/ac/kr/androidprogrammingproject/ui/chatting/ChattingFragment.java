@@ -1,9 +1,11 @@
 package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -11,14 +13,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 import hansung.ac.kr.androidprogrammingproject.ChattingRoomList;
 import hansung.ac.kr.androidprogrammingproject.MyAdapter;
 import hansung.ac.kr.androidprogrammingproject.R;
+import hansung.ac.kr.androidprogrammingproject.RegisterActivity;
+import hansung.ac.kr.androidprogrammingproject.UserAccount;
 import hansung.ac.kr.androidprogrammingproject.databinding.FragmentChattingBinding;
 
 public class ChattingFragment extends Fragment {
+
+    private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
+    private DatabaseReference databaseRef; // 실시간 데이터베이스
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -29,27 +47,6 @@ public class ChattingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //    private String room_id;
-        //    private String nickname;
-        //    private String u_id;
-        //    private String imageURL;
-        //    private String lastMessage;
-        //    private String time;
-
-        // 나머지 데이터 추가...
-        myDataset.add(new ChattingRoomList("0001","홍길동","1", "", "뭐해?", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0002","고길동","2", "", "배고파ㅋㅋ", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0003","철수","3", "", "ㅋㅋㅋㅊㅋ", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0004","영희","4", "", "헐~", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0005","고등어","5", "", "대박!", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0006","참치","6", "", "내일 어때?", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0007","꽁치","7", "", "ㅠㅠ", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0008","말미잘","8", "", "뭐해?", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("0009","홍어","9", "", "아...", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("00010","호랑이","10", "", "진짜?", "오후 04:53"));
-        myDataset.add(new ChattingRoomList("00011","고라니","11", "", "크크쿸ㅋㅋ", "오후 04:53"));
-
     }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -66,6 +63,32 @@ public class ChattingFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
+        //
+        databaseRef = FirebaseDatabase.getInstance().getReference("project").child("UsersRoom");
+
+        // 데이터 읽기
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // 데이터를 읽어올 수 있음
+                myDataset.clear(); // 기존 데이터 초기화
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    ChattingRoomList chattingRoom = snapshot.getValue(ChattingRoomList.class);
+                    myDataset.add(chattingRoom);
+                }
+
+                // 데이터가 갱신되었음을 알림
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // 읽기 실패 시 호출
+                Log.w("DatabaseError", "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+
+        //
         mAdapter = new MyAdapter(myDataset);
         recyclerView.setAdapter(mAdapter);
 

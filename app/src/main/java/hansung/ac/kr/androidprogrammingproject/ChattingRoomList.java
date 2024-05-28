@@ -9,6 +9,8 @@ public class ChattingRoomList {
     private String lastMessage;
     private String time;
 
+    public ChattingRoomList() {}
+
     public ChattingRoomList(String room_id, String nickname, String u_id, String imageURL, String lastMessage, String time) {
         this.room_id = room_id;
         this.nickname = nickname;
