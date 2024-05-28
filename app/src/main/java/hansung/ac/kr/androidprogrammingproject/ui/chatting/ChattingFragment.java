@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import hansung.ac.kr.androidprogrammingproject.DataModel;
+import hansung.ac.kr.androidprogrammingproject.ChattingRoomList;
 import hansung.ac.kr.androidprogrammingproject.MyAdapter;
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.databinding.FragmentChattingBinding;
@@ -24,25 +23,32 @@ public class ChattingFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<DataModel> myDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
+    private ArrayList<ChattingRoomList> myDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
     private FragmentChattingBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //    private String room_id;
+        //    private String nickname;
+        //    private String u_id;
+        //    private String imageURL;
+        //    private String lastMessage;
+        //    private String time;
+
         // 나머지 데이터 추가...
-        myDataset.add(new DataModel("이미지1","텍스트1","텍스트1"));
-        myDataset.add(new DataModel("이미지2","텍스트2","텍스트2"));
-        myDataset.add(new DataModel("이미지3","텍스트3","텍스트3"));
-        myDataset.add(new DataModel("이미지4","텍스트4","텍스트4"));
-        myDataset.add(new DataModel("이미지5","텍스트5","텍스트5"));
-        myDataset.add(new DataModel("이미지6","텍스트6","텍스트6"));
-        myDataset.add(new DataModel("이미지7","텍스트7","텍스트7"));
-        myDataset.add(new DataModel("이미지8","텍스트8","텍스트8"));
-        myDataset.add(new DataModel("이미지9","텍스트9","텍스트9"));
-        myDataset.add(new DataModel("이미지10","텍스트10","텍스트10"));
-        myDataset.add(new DataModel("이미지11","텍스트11","텍스트11"));
+        myDataset.add(new ChattingRoomList("0001","홍길동","1", "", "뭐해?", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0002","고길동","2", "", "배고파ㅋㅋ", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0003","철수","3", "", "ㅋㅋㅋㅊㅋ", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0004","영희","4", "", "헐~", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0005","고등어","5", "", "대박!", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0006","참치","6", "", "내일 어때?", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0007","꽁치","7", "", "ㅠㅠ", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0008","말미잘","8", "", "뭐해?", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("0009","홍어","9", "", "아...", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("00010","호랑이","10", "", "진짜?", "오후 04:53"));
+        myDataset.add(new ChattingRoomList("00011","고라니","11", "", "크크쿸ㅋㅋ", "오후 04:53"));
 
     }
     public View onCreateView(@NonNull LayoutInflater inflater,
