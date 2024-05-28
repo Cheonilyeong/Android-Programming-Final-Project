@@ -29,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hansung.ac.kr.androidprogrammingproject.LoginActivity;
+import hansung.ac.kr.androidprogrammingproject.ModificationActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.UserAccount;
 import hansung.ac.kr.androidprogrammingproject.databinding.FragmentProfileBinding;
