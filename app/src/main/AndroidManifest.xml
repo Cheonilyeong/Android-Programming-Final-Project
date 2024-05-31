@@ -19,21 +19,31 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true" >
+
+        </activity>
+
+        <!-- registerActivity -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <!-- chattingRoomActivity -->
+        <activity
+            android:name=".ChattingRoomActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- registerActivity -->
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
         <!-- mainActivity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
         </activity>
+
         <!-- modificationActivity -->
         <activity
             android:name=".ModificationActivity"

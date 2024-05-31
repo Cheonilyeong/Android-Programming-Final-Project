@@ -10,24 +10,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHolder> {
     ArrayList<ChattingRoomList> dataList;
     //Context context;
 
-    public MyAdapter(ArrayList<ChattingRoomList> dataList) {
+    public RoomListAdapter(ArrayList<ChattingRoomList> dataList) {
         this.dataList = dataList;
         //this.context = context;
     }
 
     // ViewHolder 클래스 정의
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView iv_userImage;
         public TextView textView1, textView2;
-        public ImageView imgView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            // itemView에서 textView의 참조를 얻습니다. textView의 ID는 레이아웃 파일에서 정의해야 합니다.
-            imgView= itemView.findViewById(R.id.img);
+
+            iv_userImage = itemView.findViewById(R.id.img);
             textView1 = itemView.findViewById(R.id.tv1);
             textView2 = itemView.findViewById(R.id.tv2);
         }

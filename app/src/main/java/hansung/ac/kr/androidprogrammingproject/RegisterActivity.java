@@ -59,6 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
                             account.setPassword(strPwd);
                             account.setNickName("별명을 설정하세요");
                             account.setInformation("한 줄 소개를 꾸며보세요");
+                            account.setImageURL("NULL");
 
                             // 데이터베이스에 저장
                             databaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);

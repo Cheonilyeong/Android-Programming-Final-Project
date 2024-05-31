@@ -51,7 +51,6 @@ public class ModificationActivity extends Activity {
         btn_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 selectImage();
             }
         });
@@ -62,21 +61,20 @@ public class ModificationActivity extends Activity {
             @Override
             public void onClick(View view) {
                 // 이미지 업로드
-                uploadImageThenSave();
+                uploadImage();
+                save();
                 finish();
             }
         });
     }
 
     // 이미지 업로드 (스토리지에서 고르기)
-    private void uploadImageThenSave() {
+    private void uploadImage() {
         if(selectedImageUri == null) return;
 
         // Storage 참조 생성
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        // 파일명을 위한 타임스탬프 생성
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        StorageReference fileReference = storageReference.child("profile/" + timestamp + ".jpg");
+        StorageReference fileReference = storageReference.child("profile/" + uploadedImageUri + ".jpg");
 
         try {
             // 파일이 존재하는지 확인하기 위해 InputStream 열기
@@ -90,9 +88,7 @@ public class ModificationActivity extends Activity {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 // 업로드 성공 시
-                                uploadedImageUri = "/profile/" + timestamp + ".jpg";
                                 Log.d("putFile", "Upload Success: " + uploadedImageUri);
-                                save();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -100,7 +96,6 @@ public class ModificationActivity extends Activity {
                             public void onFailure(@NonNull Exception e) {
                                 // 업로드 실패 시
                                 Log.d("putFile", "Upload Failed: " + e.getMessage());
-                                save();
                             }
                         });
             } else {
@@ -136,7 +131,7 @@ public class ModificationActivity extends Activity {
 
                         account.setNickName(et_nickname.getText().toString());
                         account.setInformation(et_information.getText().toString());
-                        if(uploadedImageUri != null) account.setImageURL(uploadedImageUri);
+                        if(uploadedImageUri != null) account.setImageURL("/profile/" + uploadedImageUri + ".jpg");
                         // 다시 저장
                         databaseRef.child(currentUserId).setValue(account);
                     }
@@ -164,6 +159,7 @@ public class ModificationActivity extends Activity {
         // Image 선택의 경우면
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
+            uploadedImageUri = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             // Image 바꾸기 (아직 서버에 저장은 X)
             CircleImageView iv_image = findViewById(R.id.iv_userImage);
             iv_image.setImageURI(selectedImageUri);

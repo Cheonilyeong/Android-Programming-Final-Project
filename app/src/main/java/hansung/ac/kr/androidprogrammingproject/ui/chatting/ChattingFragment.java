@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,11 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import hansung.ac.kr.androidprogrammingproject.ChattingRoomList;
-import hansung.ac.kr.androidprogrammingproject.MyAdapter;
+import hansung.ac.kr.androidprogrammingproject.RoomListAdapter;
 import hansung.ac.kr.androidprogrammingproject.R;
-import hansung.ac.kr.androidprogrammingproject.RegisterActivity;
-import hansung.ac.kr.androidprogrammingproject.UserAccount;
 import hansung.ac.kr.androidprogrammingproject.databinding.FragmentChattingBinding;
 
 public class ChattingFragment extends Fragment {
@@ -41,7 +34,7 @@ public class ChattingFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<ChattingRoomList> myDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
+    private ArrayList<ChattingRoomList> chattingRoomDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
     private FragmentChattingBinding binding;
 
     @Override
@@ -56,14 +49,11 @@ public class ChattingFragment extends Fragment {
         binding = FragmentChattingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
         recyclerView = root.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
-
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        //
         databaseRef = FirebaseDatabase.getInstance().getReference("project").child("UsersRoom");
 
         // 데이터 읽기
@@ -71,10 +61,10 @@ public class ChattingFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // 데이터를 읽어올 수 있음
-                myDataset.clear(); // 기존 데이터 초기화
+                chattingRoomDataset.clear(); // 기존 데이터 초기화
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChattingRoomList chattingRoom = snapshot.getValue(ChattingRoomList.class);
-                    myDataset.add(chattingRoom);
+                    chattingRoomDataset.add(chattingRoom);
                 }
 
                 // 데이터가 갱신되었음을 알림
@@ -88,8 +78,7 @@ public class ChattingFragment extends Fragment {
             }
         });
 
-        //
-        mAdapter = new MyAdapter(myDataset);
+        mAdapter = new RoomListAdapter(chattingRoomDataset);
         recyclerView.setAdapter(mAdapter);
 
         return root;
