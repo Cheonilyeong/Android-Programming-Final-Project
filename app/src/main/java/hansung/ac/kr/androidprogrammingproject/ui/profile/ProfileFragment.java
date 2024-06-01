@@ -37,18 +37,18 @@ import hansung.ac.kr.androidprogrammingproject.databinding.FragmentProfileBindin
 public class ProfileFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;          // 파이어베이스 인증처리
-    private FirebaseUser firebaseUser;
-    private DatabaseReference databaseRef;      // 실시간 데이터 베이스
-    private FirebaseStorage storage;
-    private StorageReference storageRef;
+    private FirebaseUser firebaseUser;          // 파이어베이스 유저
+    private FirebaseDatabase database;          // 데이터베이스 인스턴스
+    private DatabaseReference databaseRef;      // 데이터베이스 레퍼런스
+    private FirebaseStorage storage;            // 스토리지 인스턴스
+    private StorageReference storageRef;        // 스토리지 레퍼런스
 
-    private FragmentProfileBinding binding;
+    private FragmentProfileBinding binding;     // ProfileFragment 바인딩
 
-    // User Profile
-    private TextView tv_userName;
-    private TextView tv_userNickname;
-    private TextView tv_userInformation;
-    private CircleImageView iv_profile;
+    private CircleImageView iv_profile;         // profile
+    private TextView tv_e_mail;                 // e-mail
+    private TextView tv_nickname;               // nickname
+    private TextView tv_information;            // information
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -60,14 +60,15 @@ public class ProfileFragment extends Fragment {
 
         // User Profile 정보
         iv_profile = root.findViewById(R.id.iv_profile);
-        tv_userName = root.findViewById(R.id.tv_name);
-        tv_userNickname = root.findViewById(R.id.tv_nickname);
-        tv_userInformation = root.findViewById(R.id.tv_information);
+        tv_e_mail = root.findViewById(R.id.tv_e_mail);
+        tv_nickname = root.findViewById(R.id.tv_nickname);
+        tv_information = root.findViewById(R.id.tv_information);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
-        databaseRef = FirebaseDatabase.getInstance().getReference("project").child("UserAccount");
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("project").child("UserAccount");
 
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
@@ -84,17 +85,17 @@ public class ProfileFragment extends Fragment {
 
                     // 로그인한 사용자의 정보를 활용합니다.
                     if (account != null) {
-                        String email = account.getEmail();
+                        String e_mail = account.getEmail();
                         String nickname = account.getNickName();
                         String information = account.getInformation();
                         String imageUrl = account.getImageURL();
                         // 예: 화면에 사용자 정보를 표시
-                        Log.d("UserInfo", "Email: " + email + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageUrl);
+                        Log.d("UserInfo", "Email: " + e_mail + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageUrl);
 
                         downloadImage(imageUrl);
-                        tv_userName.setText(email);
-                        tv_userNickname.setText(nickname);
-                        tv_userInformation.setText(information);
+                        tv_e_mail.setText(e_mail);
+                        tv_nickname.setText(nickname);
+                        tv_information.setText(information);
                     }
                 }
                 @Override
@@ -137,14 +138,14 @@ public class ProfileFragment extends Fragment {
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                // 다운로드 URL이 성공적으로 가져와졌을 때
-                // uri.toString()을 사용하여 이미지의 URL을 가져올 수 있습니다.
+                // 다운로드 URL이 성공적으로 가져왔으면
+                // 이미지의 URL 가져오기
                 loadImageIntoImageView(uri.toString());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // URL을 가져오는 데 실패했을 때의 처리
+                // URL을 가져오는 데 실패했을 때
                 // 기본사진으로
                 loadImageIntoImageView("/profile/NULL.jpg");
             }
@@ -152,7 +153,6 @@ public class ProfileFragment extends Fragment {
     }
     // 이미지 저장
     public void loadImageIntoImageView(String imageUrl) {
-
         Glide.with(this)
                 .load(imageUrl)
                 .into(iv_profile);

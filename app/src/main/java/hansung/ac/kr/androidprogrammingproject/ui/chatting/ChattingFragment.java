@@ -28,13 +28,15 @@ import hansung.ac.kr.androidprogrammingproject.databinding.FragmentChattingBindi
 
 public class ChattingFragment extends Fragment {
 
-    private DatabaseReference databaseRef;
+    private FirebaseDatabase database;          // 데이터베이스 인스턴스
+    private DatabaseReference databaseRef;      // 데이터베이스 레퍼런스
 
-    private RecyclerView recyclerView;
-    private RoomListAdapter roomListAdapter;
+    private RecyclerView recyclerView;          // 리사이클러 뷰 
+    private RoomListAdapter roomListAdapter;    // 어뎁터
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<RoomList> roomDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
-    private FragmentChattingBinding binding;
+    
+    private FragmentChattingBinding binding;    // ChattingFragment 바인딩
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,23 +44,17 @@ public class ChattingFragment extends Fragment {
     }
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // ChattingFragment 바인딩
         ChattingViewModel chattingViewModel =
                 new ViewModelProvider(this).get(ChattingViewModel.class);
-        // ChattingFragment 바인딩
         binding = FragmentChattingBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        // RecyclerView
         recyclerView = root.findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
-        databaseRef = FirebaseDatabase.getInstance().getReference("project").child("UsersRoom").child(LoginActivity.u_id);
-
-        // ChattingRoomList chattingRoomList = new ChattingRoomList("DVNyi6AOOqgKwbTN5dNsSSzT9Pw2", "nickname", "DVNyi6AOOqgKwbTN5dNsSSzT9Pw1", "/profile/20240527_113111.jpg",
-        // "뭐해?", "20240531");
-        // databaseRef.push().setValue(chattingRoomList);
-        // roomDataset.add(chattingRoomList);
 
         roomListAdapter = new RoomListAdapter(roomDataset);
         roomListAdapter.setOnItemClickListener(new RoomListAdapter.OnItemClickListener() {
@@ -74,8 +70,9 @@ public class ChattingFragment extends Fragment {
             }
         });
 
-
         // 데이터 읽기
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id);
         databaseRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {

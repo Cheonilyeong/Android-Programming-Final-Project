@@ -21,9 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
-    private DatabaseReference databaseRef; // 실시간 데이터베이스
+    private FirebaseDatabase database;     // 데이터베이스 인스턴스
+    private DatabaseReference databaseRef; // 데이터베이스 레퍼런스
 
-    private EditText etEmail, etPwd;        // ID and PWD
+    private EditText etEmail, etPwd;        // 회원가입 e_mail, 회원가입 passwd
     private Button btnRegister;             // 회원 가입 버튼
 
     @Override
@@ -32,7 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_resigter);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        databaseRef = FirebaseDatabase.getInstance().getReference("project");
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("project");
 
         // 이메일, 패스워드
         etEmail = findViewById(R.id.et_email);

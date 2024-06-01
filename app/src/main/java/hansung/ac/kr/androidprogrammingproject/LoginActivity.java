@@ -20,12 +20,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
-    private DatabaseReference databaseRef; // 실시간 데이터베이스
     public static String u_id;             // 사용자 u_id
 
-    private EditText etEmail, etPwd;
-    private Button btnLogin, btnRegister;
+    private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
+
+    private EditText etEmail, etPwd;        // 로그인 e_mail, 로그인 passwd
+    private Button btnLogin, btnRegister;   // 로그인 버튼, 회원가입 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // Firebase 가져오기
         firebaseAuth = FirebaseAuth.getInstance();
-        databaseRef = FirebaseDatabase.getInstance().getReference("project");
 
         // 이메일, 패스워드
         etEmail = findViewById(R.id.et_email);
@@ -91,5 +90,4 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
-
 }

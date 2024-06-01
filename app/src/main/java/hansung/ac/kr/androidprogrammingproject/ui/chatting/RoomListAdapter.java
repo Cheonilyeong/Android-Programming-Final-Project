@@ -29,13 +29,13 @@ import hansung.ac.kr.androidprogrammingproject.UserAccount;
 
 public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHolder> {
 
-    private FirebaseDatabase database;     // 파이어베이스 인증처리
-    private DatabaseReference databaseRef; // 실시간 데이터베이스
-    private FirebaseStorage storage;
-    private StorageReference storageRef;
+    private FirebaseDatabase database;             // 데이터베이스 인스턴스
+    private DatabaseReference databaseRef;         // 데이터베이스 레퍼런스
+    private FirebaseStorage storage;               // 스토리지 인스턴스
+    private StorageReference storageRef;           // 스토리지 레퍼런스
 
-    private OnItemClickListener itemClickListener; // OnItemClickListener 참조 변수 선언
-    ArrayList<RoomList> dataList;          // ChattingRoomList
+    private OnItemClickListener itemClickListener; // OnItemClickListener
+    ArrayList<RoomList> dataList;                  // RoomList
 
     public RoomListAdapter(ArrayList<RoomList> dataList) {
         this.dataList = dataList;
@@ -57,17 +57,17 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // 새로운 뷰를 생성합니다.
+        // 새로운 뷰 생성
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.room_list, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
 
-        //===== [Click 이벤트 구현을 위해 추가된 코드] =====================
+        // setOnClickListener
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = viewHolder.getBindingAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) { // 유효한 위치인지 확인
+                if (position != RecyclerView.NO_POSITION) {                 // 유효한 위치인지 확인
                     String room_id = dataList.get(position).getRoom_id();
                     String u_id = dataList.get(position).getU_id();
 
@@ -78,7 +78,6 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
                 }
             }
         });
-
         return viewHolder;
     }
 
@@ -112,14 +111,14 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                // 다운로드 URL이 성공적으로 가져와졌을 때
-                // uri.toString()을 사용하여 이미지의 URL을 가져올 수 있습니다.
+                // 다운로드 URL이 성공적으로 가져왔으면
+                // 이미지의 URL 가져오기
                 loadImageIntoImageView(holder, uri.toString());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // URL을 가져오는 데 실패했을 때의 처리
+                // URL을 가져오는 데 실패했을 때
                 // 기본사진으로
                 loadImageIntoImageView(holder, "/profile/NULL.jpg");
             }
@@ -127,7 +126,6 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     }
     // 이미지 저장
     public void loadImageIntoImageView(ViewHolder holder, String imageUrl) {
-
         Glide.with(holder.itemView.getContext())
                 .load(imageUrl)
                 .into(holder.iv_profile);
@@ -150,7 +148,6 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
             break;
         }
     }
-
 
     // OnItemClickListener 인터페이스 선언
     public interface OnItemClickListener {

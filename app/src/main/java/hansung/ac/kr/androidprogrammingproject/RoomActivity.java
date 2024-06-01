@@ -34,29 +34,31 @@ import java.util.Date;
 
 public class RoomActivity extends AppCompatActivity {
 
-    private FirebaseDatabase database;
-    private DatabaseReference databaseRef;
-    private FirebaseStorage storage;
-    private StorageReference storageRef;
+    private FirebaseDatabase database;          // 데이터베이스 인스턴스
+    private DatabaseReference databaseRef;      // 데이터베이스 레퍼런스
+    private FirebaseStorage storage;            // 스토리지 인스턴스
+    private StorageReference storageRef;        // 스토리즈 레퍼런스
 
+    // Recycler View
     private RecyclerView recyclerView;
     private MessageAdapter messageAdapter;
     private LinearLayoutManager layoutManager;
     private ArrayList<Message> messageDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
 
-    private TextView tv_nickname;
-    private ImageView iv_profile;
+    private TextView tv_nickname;               // 대화 상대 nickname
+    private ImageView iv_profile;               // 대화 상대 profile
 
-    private String room_id;
-    private String u_id;
-    private String nickname;
-    private String imageURL;
+    private String room_id;                     // 대화 방 room_id
+    private String u_id;                        // 대화 상대 u_id
+    private String nickname;                    // 대화 상대 nickname
+    private String imageURL;                    // 대화 상대 imageURL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
 
+        // Recycler View
         recyclerView = findViewById(R.id.rv);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -64,7 +66,9 @@ public class RoomActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         messageAdapter = new MessageAdapter(messageDataset);
+        recyclerView.setAdapter(messageAdapter);
 
+        // Get room_id & u_id
         Intent intent = getIntent();
         room_id = intent.getStringExtra("room_id");
         u_id = intent.getStringExtra("u_id");
@@ -93,7 +97,6 @@ public class RoomActivity extends AppCompatActivity {
         });
         //
 
-        database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("project").child("Room").child(room_id);
 
         databaseRef.addChildEventListener(new ChildEventListener() {
@@ -112,8 +115,6 @@ public class RoomActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-
-        recyclerView.setAdapter(messageAdapter);
 
         EditText et_msg = findViewById(R.id.et_msg);
         Button btn_send = findViewById(R.id.btn_send);
@@ -148,14 +149,14 @@ public class RoomActivity extends AppCompatActivity {
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                // 다운로드 URL이 성공적으로 가져와졌을 때
-                // uri.toString()을 사용하여 이미지의 URL을 가져올 수 있습니다.
+                // 다운로드 URL이 성공적으로 가져왔을 때
+                // 이미지 URL을 가져오기
                 loadImageIntoImageView(uri.toString());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // URL을 가져오는 데 실패했을 때의 처리
+                // URL을 가져오는 데 실패했을 때
                 // 기본 사진으로
                 loadImageIntoImageView("/profile/NULL.jpg");
             }
@@ -163,7 +164,6 @@ public class RoomActivity extends AppCompatActivity {
     }
     // 이미지 저장
     public void loadImageIntoImageView(String imageUrl) {
-
         Glide.with(this)
                 .load(imageUrl)
                 .into(iv_profile);

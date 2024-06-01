@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-    ArrayList<Message> dataList;
+    ArrayList<Message> dataList;    // message
 
     public MessageAdapter(ArrayList<Message> dataList) {
         this.dataList = dataList;
@@ -29,19 +29,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // 새로운 뷰를 생성합니다.
+        // 새로운 뷰를 생성
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // 데이터를 뷰 홀더의 뷰에 바인딩합니다.
+        // 데이터를 뷰 홀더의 뷰에 바인딩
         Message dataModel = dataList.get(position);
 
-       // holder.tv_nickname.setText("nickname");
+        //holder.tv_nickname.setText("nickname");
         holder.tv_msg.setText(dataModel.getMessage());
-
+        
+        // 내가 쓴 Message면 오른쪽에 배치
         if(dataModel.getU_id().equals(LoginActivity.u_id)) {
             holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
             holder.tv_nickname.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
