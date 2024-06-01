@@ -19,8 +19,6 @@ android {
     }
     gradle
 
-
-
     buildTypes {
         release {
             isMinifyEnabled = false

@@ -1,40 +1,39 @@
 package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import hansung.ac.kr.androidprogrammingproject.ChattingRoomList;
-import hansung.ac.kr.androidprogrammingproject.RoomListAdapter;
+import hansung.ac.kr.androidprogrammingproject.RoomActivity;
+import hansung.ac.kr.androidprogrammingproject.LoginActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.databinding.FragmentChattingBinding;
 
 public class ChattingFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
-    private DatabaseReference databaseRef; // 실시간 데이터베이스
+    private DatabaseReference databaseRef;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RoomListAdapter roomListAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<ChattingRoomList> chattingRoomDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
+    private ArrayList<RoomList> roomDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
     private FragmentChattingBinding binding;
 
     @Override
@@ -54,33 +53,49 @@ public class ChattingFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        databaseRef = FirebaseDatabase.getInstance().getReference("project").child("UsersRoom");
+        databaseRef = FirebaseDatabase.getInstance().getReference("project").child("UsersRoom").child(LoginActivity.u_id);
 
-        // 데이터 읽기
-        databaseRef.addValueEventListener(new ValueEventListener() {
+        // ChattingRoomList chattingRoomList = new ChattingRoomList("DVNyi6AOOqgKwbTN5dNsSSzT9Pw2", "nickname", "DVNyi6AOOqgKwbTN5dNsSSzT9Pw1", "/profile/20240527_113111.jpg",
+        // "뭐해?", "20240531");
+        // databaseRef.push().setValue(chattingRoomList);
+        // roomDataset.add(chattingRoomList);
+
+        roomListAdapter = new RoomListAdapter(roomDataset);
+        roomListAdapter.setOnItemClickListener(new RoomListAdapter.OnItemClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // 데이터를 읽어올 수 있음
-                chattingRoomDataset.clear(); // 기존 데이터 초기화
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ChattingRoomList chattingRoom = snapshot.getValue(ChattingRoomList.class);
-                    chattingRoomDataset.add(chattingRoom);
-                }
+            public void onItemClicked(String room_id, String u_id) {
+                databaseRef = FirebaseDatabase.getInstance().getReference("project").child("Room");
+                databaseRef.push();
 
-                // 데이터가 갱신되었음을 알림
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // 읽기 실패 시 호출
-                Log.w("DatabaseError", "loadPost:onCancelled", databaseError.toException());
+                Intent intent = new Intent(getActivity(), RoomActivity.class);
+                intent.putExtra("room_id", room_id);
+                intent.putExtra("u_id", u_id);
+                startActivity(intent);
             }
         });
 
-        mAdapter = new RoomListAdapter(chattingRoomDataset);
-        recyclerView.setAdapter(mAdapter);
 
+        // 데이터 읽기
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                RoomList roomList = snapshot.getValue(RoomList.class);
+                roomListAdapter.addChattingRoom(roomList);
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                RoomList roomList = snapshot.getValue(RoomList.class);
+                roomListAdapter.changeLastMessage(roomList);
+            }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
+        recyclerView.setAdapter(roomListAdapter);
         return root;
     }
 

@@ -7,7 +7,7 @@
     android:background="#CCB980">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_userImage"
+        android:id="@+id/iv_profile"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="100dp"

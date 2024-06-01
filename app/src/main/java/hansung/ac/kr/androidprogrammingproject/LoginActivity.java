@@ -22,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
     private DatabaseReference databaseRef; // 실시간 데이터베이스
+    public static String u_id;             // 사용자 u_id
 
     private EditText etEmail, etPwd;
     private Button btnLogin, btnRegister;
@@ -52,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 로그인 성공
                         if(task.isSuccessful()) {
+                            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                            u_id = currentUser.getUid();
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();   // 현재 엑티비티 삭제
@@ -81,9 +84,11 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         // 로그인 기록이 있으면
         if (currentUser != null) {
+            u_id = currentUser.getUid();
             // 자동 로그인
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 

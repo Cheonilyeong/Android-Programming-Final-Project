@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
     private TextView tv_userName;
     private TextView tv_userNickname;
     private TextView tv_userInformation;
-    private CircleImageView iv_userImage;
+    private CircleImageView iv_profile;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class ProfileFragment extends Fragment {
         View root = binding.getRoot();
 
         // User Profile 정보
-        iv_userImage = root.findViewById(R.id.iv_userImage);
+        iv_profile = root.findViewById(R.id.iv_profile);
         tv_userName = root.findViewById(R.id.tv_name);
         tv_userNickname = root.findViewById(R.id.tv_nickname);
         tv_userInformation = root.findViewById(R.id.tv_information);
@@ -91,8 +91,7 @@ public class ProfileFragment extends Fragment {
                         // 예: 화면에 사용자 정보를 표시
                         Log.d("UserInfo", "Email: " + email + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageUrl);
 
-                        if(imageUrl == "NULL") iv_userImage.setImageResource(R.drawable.baseline_person_24);
-                        else downloadImage(imageUrl);
+                        downloadImage(imageUrl);
                         tv_userName.setText(email);
                         tv_userNickname.setText(nickname);
                         tv_userInformation.setText(information);
@@ -146,7 +145,8 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // URL을 가져오는 데 실패했을 때의 처리
-                // 기본 사진으로
+                // 기본사진으로
+                loadImageIntoImageView("/profile/NULL.jpg");
             }
         });
     }
@@ -155,7 +155,7 @@ public class ProfileFragment extends Fragment {
 
         Glide.with(this)
                 .load(imageUrl)
-                .into(iv_userImage);
+                .into(iv_profile);
     }
     @Override
     public void onDestroyView() {
