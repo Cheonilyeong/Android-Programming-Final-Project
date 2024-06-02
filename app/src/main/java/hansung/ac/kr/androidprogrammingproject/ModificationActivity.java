@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -41,17 +43,55 @@ public class ModificationActivity extends Activity {
     private final int PICK_IMAGE_REQUEST = 1;
     private Uri selectedImageUri = null;
     private String uploadedImageUri = null;
+    private String imageURL;
+
+    private FirebaseDatabase database;          // 데이터베이스 인스턴스
+    private DatabaseReference databaseRef;      // 데이터베이스 레퍼런스
+    private FirebaseStorage storage;            // 스토리지 인스턴스
+    private StorageReference storageRef;        // 스토리지 레퍼런스
+
+    private CircleImageView iv_profile;
+    private ImageView iv_back;
+    private EditText et_nickname;
+    private EditText et_information;
+    private Button btn_image;
+    private Button btn_basicImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modification);
 
-        // Image 수정 버튼
-        Button btn_image = findViewById(R.id.btn_image);
+        iv_profile = findViewById(R.id.iv_profile);
+        iv_back = findViewById(R.id.iv_back);
+        et_nickname = findViewById(R.id.et_nickname);
+        et_information = findViewById(R.id.et_information);
+        btn_image = findViewById(R.id.btn_image);
+        btn_basicImage = findViewById(R.id.btn_basicImage);
+
+        // 뒤로가기 버튼
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        // 이미지 가져오기 버튼
         btn_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 selectImage();
+            }
+        });
+
+        // 기본이미지 버튼
+        btn_basicImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectedImageUri = null;
+                uploadedImageUri = null;
+                iv_profile.setImageResource(R.drawable.basicimage);
             }
         });
 
@@ -65,6 +105,24 @@ public class ModificationActivity extends Activity {
                 save();
                 finish();
             }
+        });
+
+        // 기존 이미지 URL 가져오기
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("project").child("UserAccount").child(LoginActivity.u_id);
+        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserAccount userAccount = snapshot.getValue(UserAccount.class);
+                imageURL = userAccount.getImageURL();
+                Log.d("imageURL", imageURL);
+                if(!imageURL.equals("/profile/NULL.jpg")) downloadImage(imageURL);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
@@ -126,12 +184,11 @@ public class ModificationActivity extends Activity {
                     UserAccount account = dataSnapshot.getValue(UserAccount.class);
                     // 로그인한 사용자의 정보
                     if (account != null) {
-                        EditText et_nickname = findViewById(R.id.et_nickname);
-                        EditText et_information = findViewById(R.id.et_information);
 
                         account.setNickName(et_nickname.getText().toString());
                         account.setInformation(et_information.getText().toString());
                         if(uploadedImageUri != null) account.setImageURL("/profile/" + uploadedImageUri + ".jpg");
+                        else account.setImageURL("/profile/NULL.jpg");
                         // 다시 저장
                         databaseRef.child(currentUserId).setValue(account);
                     }
@@ -161,9 +218,34 @@ public class ModificationActivity extends Activity {
             selectedImageUri = data.getData();
             uploadedImageUri = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             // Image 바꾸기 (아직 서버에 저장은 X)
-            CircleImageView iv_image = findViewById(R.id.iv_userImage);
-            iv_image.setImageURI(selectedImageUri);
+            iv_profile.setImageURI(selectedImageUri);
         }
+    }
+
+    // 이미지 로드
+    public void downloadImage(String imageURL) {
+        StorageReference imageRef = storageRef.child(imageURL);
+        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                // 다운로드 URL이 성공적으로 가져왔으면
+                // 이미지의 URL 가져오기
+                loadImageIntoImageView(uri.toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // URL을 가져오는 데 실패했을 때
+                // 기본사진으로
+                loadImageIntoImageView("/profile/NULL.jpg");
+            }
+        });
+    }
+    // 이미지 저장
+    public void loadImageIntoImageView(String imageUrl) {
+        Glide.with(this)
+                .load(imageUrl)
+                .into(iv_profile);
     }
 
 }

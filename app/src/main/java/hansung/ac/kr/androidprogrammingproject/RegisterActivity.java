@@ -24,7 +24,9 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseDatabase database;     // 데이터베이스 인스턴스
     private DatabaseReference databaseRef; // 데이터베이스 레퍼런스
 
-    private EditText etEmail, etPwd;        // 회원가입 e_mail, 회원가입 passwd
+    private EditText et_email, et_passwd;        // 회원가입 e_mail, 회원가입 passwd
+    private EditText et_nickname, et_information; // 회원가입 nickname, 회원가입 information
+
     private Button btnRegister;             // 회원 가입 버튼
 
     @Override
@@ -37,18 +39,39 @@ public class RegisterActivity extends AppCompatActivity {
         databaseRef = database.getReference("project");
 
         // 이메일, 패스워드
-        etEmail = findViewById(R.id.et_email);
-        etPwd = findViewById(R.id.et_pwd);
+        et_email = findViewById(R.id.et_e_mail);
+        et_passwd = findViewById(R.id.et_passwd);
+        et_nickname = findViewById(R.id.et_nickname);
+        et_information = findViewById(R.id.et_information);
 
         // 회원가입 버튼
         btnRegister = findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String strEmail = etEmail.getText().toString();
-                String strPwd = etPwd.getText().toString();
+                String email = et_email.getText().toString();
+                String passwd = et_passwd.getText().toString();
+                String nickname = et_nickname.getText().toString();
+                String information = et_information.getText().toString();
 
-                firebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                if(email.equals("") || email.trim().equals("")) {
+                    Toast.makeText(RegisterActivity.this, "E-mail을 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(passwd.equals("") || passwd.trim().equals("")) {
+                    Toast.makeText(RegisterActivity.this, "Password를 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(nickname.equals("") || nickname.trim().equals("")) {
+                    Toast.makeText(RegisterActivity.this, "Nickname을 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(information.equals("") || information.trim().equals("")) {
+                    Toast.makeText(RegisterActivity.this, "Information을 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                firebaseAuth.createUserWithEmailAndPassword(email, passwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 회원가입 성공
@@ -58,10 +81,10 @@ public class RegisterActivity extends AppCompatActivity {
                             UserAccount account = new UserAccount();
                             account.setIdToken(firebaseAuth.getUid());
                             account.setEmail(firebaseUser.getEmail());
-                            account.setPassword(strPwd);
-                            account.setNickName("별명을 설정하세요");
-                            account.setInformation("한 줄 소개를 꾸며보세요");
-                            account.setImageURL("NULL");
+                            account.setPassword(passwd);
+                            account.setNickName(nickname);
+                            account.setInformation(information);
+                            account.setImageURL("/profile/NULL.jpg");
 
                             // 데이터베이스에 저장
                             databaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);

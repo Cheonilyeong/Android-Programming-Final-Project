@@ -20,9 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
-    public static String u_id;             // 사용자 u_id
+    public static String u_id;              // 사용자 u_id
 
-    private FirebaseAuth firebaseAuth;     // 파이어베이스 인증처리
+    private FirebaseAuth firebaseAuth;      // 파이어베이스 인증처리
 
     private EditText etEmail, etPwd;        // 로그인 e_mail, 로그인 passwd
     private Button btnLogin, btnRegister;   // 로그인 버튼, 회원가입 버튼
@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // 이메일, 패스워드
         etEmail = findViewById(R.id.et_email);
-        etPwd = findViewById(R.id.et_pwd);
+        etPwd = findViewById(R.id.et_passwd);
 
         // 로그인 버튼
         btnLogin = findViewById(R.id.btn_login);

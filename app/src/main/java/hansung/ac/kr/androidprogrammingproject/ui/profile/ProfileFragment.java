@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;     // ProfileFragment 바인딩
 
     private CircleImageView iv_profile;         // profile
-    private TextView tv_e_mail;                 // e-mail
+    private TextView tv_email;                 // e-mail
     private TextView tv_nickname;               // nickname
     private TextView tv_information;            // information
 
@@ -60,7 +60,7 @@ public class ProfileFragment extends Fragment {
 
         // User Profile 정보
         iv_profile = root.findViewById(R.id.iv_profile);
-        tv_e_mail = root.findViewById(R.id.tv_e_mail);
+        tv_email = root.findViewById(R.id.tv_email);
         tv_nickname = root.findViewById(R.id.tv_nickname);
         tv_information = root.findViewById(R.id.tv_information);
 
@@ -81,19 +81,20 @@ public class ProfileFragment extends Fragment {
             databaseRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    UserAccount account = dataSnapshot.getValue(UserAccount.class);
+                    UserAccount userAccount = dataSnapshot.getValue(UserAccount.class);
 
                     // 로그인한 사용자의 정보를 활용합니다.
-                    if (account != null) {
-                        String e_mail = account.getEmail();
-                        String nickname = account.getNickName();
-                        String information = account.getInformation();
-                        String imageUrl = account.getImageURL();
+                    if (userAccount != null) {
+                        String email = userAccount.getEmail();
+                        String nickname = userAccount.getNickName();
+                        String information = userAccount.getInformation();
+                        String imageURL = userAccount.getImageURL();
                         // 예: 화면에 사용자 정보를 표시
-                        Log.d("UserInfo", "Email: " + e_mail + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageUrl);
+                        Log.d("UserInfo", "Email: " + email + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageURL);
 
-                        downloadImage(imageUrl);
-                        tv_e_mail.setText(e_mail);
+                        if(imageURL.equals("NULL")) iv_profile.setImageResource(R.drawable.basicimage);
+                        else downloadImage(imageURL);
+                        tv_email.setText(email);
                         tv_nickname.setText(nickname);
                         tv_information.setText(information);
                     }
@@ -133,8 +134,8 @@ public class ProfileFragment extends Fragment {
     }
 
     // 이미지 로드
-    public void downloadImage(String imageUrl) {
-        StorageReference imageRef = storageRef.child(imageUrl);
+    public void downloadImage(String imageURL) {
+        StorageReference imageRef = storageRef.child(imageURL);
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
