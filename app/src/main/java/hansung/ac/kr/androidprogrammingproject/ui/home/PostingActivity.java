@@ -1,10 +1,11 @@
-package hansung.ac.kr.androidprogrammingproject;
+package hansung.ac.kr.androidprogrammingproject.ui.home;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -14,9 +15,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import hansung.ac.kr.androidprogrammingproject.LoginActivity;
+import hansung.ac.kr.androidprogrammingproject.R;
 
 public class PostingActivity extends AppCompatActivity {
 
@@ -25,6 +32,7 @@ public class PostingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_posting);
 
+        ImageView iv_back = findViewById(R.id.iv_back);
         EditText et_title = findViewById(R.id.et_title);
         RadioGroup rg = findViewById(R.id.rg);
         EditText et_food = findViewById(R.id.et_food);
@@ -35,6 +43,14 @@ public class PostingActivity extends AppCompatActivity {
         TextView tv_time = findViewById(R.id.tv_time);
         Button btn_showTime = findViewById(R.id.btn_time);
         Button btn_post = findViewById(R.id.btn_post);
+
+        // 뒤로가기 버튼
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         // 캘린더 뷰
         btn_showDay.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +145,10 @@ public class PostingActivity extends AppCompatActivity {
                     Toast.makeText(PostingActivity.this, "분야를 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                String str_rb_checked = "";
+                if(rg.getCheckedRadioButtonId() == R.id.rb1) str_rb_checked = "학식당";
+                if(rg.getCheckedRadioButtonId() == R.id.rb2) str_rb_checked = "배달 음식";
+                if(rg.getCheckedRadioButtonId() == R.id.rb3) str_rb_checked = "학교 주변 맛집";
                 // 음식 확인
                 String str_et_food = et_food.getText().toString();
                 if(str_et_food.equals("") || str_et_food.trim().equals("")) {
@@ -146,6 +166,7 @@ public class PostingActivity extends AppCompatActivity {
                     Toast.makeText(PostingActivity.this, "인원을 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                String str_sp_person = sp_person.getSelectedItem().toString();
                 // 날짜 확인
                 String str_tv_day = tv_day.getText().toString();
                 if(str_tv_day.equals("")) {
@@ -160,8 +181,19 @@ public class PostingActivity extends AppCompatActivity {
                 }
 
                 // 등록 글 올리기
-                // firebase push
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference databaseRef = database.getReference("project").child("post");
 
+                Post post = new Post(LoginActivity.u_id, str_et_title, str_rb_checked, str_et_food, str_et_content, str_sp_person, str_tv_day, str_tv_time);
+                databaseRef.push().setValue(post);
+
+                // 나의 게시물에 등록
+
+
+
+
+                // 완료
+                finish();
             }
         });
 

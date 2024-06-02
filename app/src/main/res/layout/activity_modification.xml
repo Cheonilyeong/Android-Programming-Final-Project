@@ -33,7 +33,6 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
-        android:backgroundTint="#0094FF"
         android:text="기본이미지"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.739"
@@ -44,13 +43,11 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="190dp"
-        android:backgroundTint="#0094FF"
         android:text="이미지 가져오기"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.739"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -90,17 +87,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <Button
         android:id="@+id/btn_save"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="520dp"
-        android:backgroundTint="#0094FF"
         android:text="저장하기"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

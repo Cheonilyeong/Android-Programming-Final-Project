@@ -247,5 +247,4 @@ public class ModificationActivity extends Activity {
                 .load(imageUrl)
                 .into(iv_profile);
     }
-
 }

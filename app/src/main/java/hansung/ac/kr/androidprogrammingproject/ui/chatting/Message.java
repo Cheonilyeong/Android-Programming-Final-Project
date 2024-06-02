@@ -1,4 +1,4 @@
-package hansung.ac.kr.androidprogrammingproject;
+package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 
 public class Message {
     private String message;

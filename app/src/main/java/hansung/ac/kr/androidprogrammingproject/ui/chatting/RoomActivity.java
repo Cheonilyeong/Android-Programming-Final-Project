@@ -1,4 +1,4 @@
-package hansung.ac.kr.androidprogrammingproject;
+package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -32,12 +32,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import hansung.ac.kr.androidprogrammingproject.LoginActivity;
+import hansung.ac.kr.androidprogrammingproject.R;
+import hansung.ac.kr.androidprogrammingproject.UserAccount;
+import hansung.ac.kr.androidprogrammingproject.ui.chatting.Message;
+import hansung.ac.kr.androidprogrammingproject.ui.chatting.MessageAdapter;
+
 public class RoomActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;          // 데이터베이스 인스턴스
     private DatabaseReference databaseRef;      // 데이터베이스 레퍼런스
-    private FirebaseStorage storage;            // 스토리지 인스턴스
-    private StorageReference storageRef;        // 스토리즈 레퍼런스
 
     // Recycler View
     private RecyclerView recyclerView;
@@ -45,6 +49,7 @@ public class RoomActivity extends AppCompatActivity {
     private LinearLayoutManager layoutManager;
     private ArrayList<Message> messageDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
 
+    private ImageView iv_back;                  // 뒤로 가기 버튼
     private TextView tv_nickname;               // 대화 상대 nickname
     private ImageView iv_profile;               // 대화 상대 profile
 
@@ -68,6 +73,15 @@ public class RoomActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messageDataset);
         recyclerView.setAdapter(messageAdapter);
 
+        // 뒤로 가기 버튼
+        iv_back = findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         // Get room_id & u_id
         Intent intent = getIntent();
         room_id = intent.getStringExtra("room_id");
@@ -76,21 +90,16 @@ public class RoomActivity extends AppCompatActivity {
 
         // Room 상대방 nickname, imageURL 구하기
         tv_nickname = findViewById(R.id.tv_nickname);
-        iv_profile = findViewById(R.id.iv_profile);
 
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("project").child("UserAccount").child(u_id);
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference();
+
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserAccount userAccount = snapshot.getValue(UserAccount.class);
                 nickname = userAccount.getNickName();
-                imageURL = userAccount.getImageURL();
-
                 tv_nickname.setText(nickname);
-                downloadImage(imageURL);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -142,30 +151,5 @@ public class RoomActivity extends AppCompatActivity {
 
         databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id);
         databaseRef.child(room_id).child("lastMessage").setValue(msg);
-    }
-    // 이미지 로드
-    public void downloadImage(String imageUrl) {
-        StorageReference imageRef = storageRef.child(imageUrl);
-        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                // 다운로드 URL이 성공적으로 가져왔을 때
-                // 이미지 URL을 가져오기
-                loadImageIntoImageView(uri.toString());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // URL을 가져오는 데 실패했을 때
-                // 기본 사진으로
-                loadImageIntoImageView("/profile/NULL.jpg");
-            }
-        });
-    }
-    // 이미지 저장
-    public void loadImageIntoImageView(String imageUrl) {
-        Glide.with(this)
-                .load(imageUrl)
-                .into(iv_profile);
     }
 }

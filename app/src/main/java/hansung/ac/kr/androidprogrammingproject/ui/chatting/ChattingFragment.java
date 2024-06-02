@@ -21,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-import hansung.ac.kr.androidprogrammingproject.RoomActivity;
 import hansung.ac.kr.androidprogrammingproject.LoginActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.databinding.FragmentChattingBinding;

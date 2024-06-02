@@ -1,4 +1,4 @@
-package hansung.ac.kr.androidprogrammingproject;
+package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import hansung.ac.kr.androidprogrammingproject.LoginActivity;
+import hansung.ac.kr.androidprogrammingproject.R;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     ArrayList<Message> dataList;    // message

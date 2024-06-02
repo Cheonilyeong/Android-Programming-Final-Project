@@ -33,7 +33,7 @@
 
         <!-- chattingRoomActivity -->
         <activity
-            android:name=".RoomActivity"
+            android:name=".ui.chatting.RoomActivity"
             android:exported="false" >
 
         </activity>
@@ -51,7 +51,7 @@
 
         <!-- postingActivity -->
         <activity
-            android:name=".PostingActivity"
+            android:name=".ui.home.PostingActivity"
             android:exported="false" >
         </activity>
 
