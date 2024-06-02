@@ -15,14 +15,11 @@
         android:theme="@style/Theme.AndroidProgrammingProject"
         tools:targetApi="31" >
 
+
         <!-- loginActivity -->
         <activity
             android:name=".LoginActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!-- registerActivity -->
@@ -47,6 +44,17 @@
             android:name=".ModificationActivity"
             android:exported="false" />
         <!-- mainActivity -->
+
+        <!-- postingActivity -->
+        <activity
+            android:name=".PostingActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
