@@ -3,8 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E5F0F5">
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="프로필"
+        android:textSize="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/iv_setting"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_settings_24" />
+
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_profile"
@@ -18,38 +42,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_setting"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_settings_24" />
-
     <Button
         android:id="@+id/btn_modification"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="300dp"
-        android:text="modification"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="320dp"
         android:backgroundTint="#0094FF"
+        android:text="프로필 수정"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_myPost"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="400dp"
+        android:backgroundTint="#0094FF"
+        android:text="내 게시물"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:text="Logout"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="480dp"
         android:backgroundTint="#0094FF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="로그아웃"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_email"

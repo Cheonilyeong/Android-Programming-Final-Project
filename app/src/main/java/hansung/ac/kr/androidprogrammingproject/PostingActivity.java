@@ -25,7 +25,6 @@ public class PostingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_posting);
 
-
         EditText et_title = findViewById(R.id.et_title);
         RadioGroup rg = findViewById(R.id.rg);
         EditText et_food = findViewById(R.id.et_food);
@@ -159,8 +158,9 @@ public class PostingActivity extends AppCompatActivity {
                     Toast.makeText(PostingActivity.this, "시간을 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                // 날짜 확인, 시간 확인
-                // 미정
+
+                // 등록 글 올리기
+                // firebase push
 
             }
         });

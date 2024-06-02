@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ModificationActivity"
-    android:background="#E5F0F5" >
+    tools:context=".ModificationActivity" >
 
     <ImageView
         android:id="@+id/iv_back"
@@ -22,64 +21,86 @@
         android:id="@+id/iv_profile"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="230dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="120dp"
         android:src="@drawable/basicimage"
         app:civ_border_color="#FF000000"
         app:civ_border_width="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/et_nickname"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="210dp"
-        android:layout_marginEnd="50dp"
-        android:hint="수정할 별명을 입력하세요"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/et_information"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="270dp"
-        android:layout_marginEnd="50dp"
-        android:hint="한 줄 소개를 입력하세요"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
-        android:text="저장하기"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_image"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="70dp"
-        android:text="이미지 가져오기"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
-
     <Button
         android:id="@+id/btn_basicImage"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="120dp"
+        android:backgroundTint="#0094FF"
         android:text="기본이미지"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.739"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
+        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/btn_image"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:backgroundTint="#0094FF"
+        android:text="이미지 가져오기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.739"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="270dp"
+        android:text="닉네임"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_back" />
+    <EditText
+        android:id="@+id/et_nickname"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="310dp"
+        android:hint="수정할 별명을 입력하세요"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="400dp"
+        android:text="한 줄 소개"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/et_information"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="430dp"
+        android:hint="한 줄 소개를 입력하세요"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="520dp"
+        android:backgroundTint="#0094FF"
+        android:text="저장하기"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
