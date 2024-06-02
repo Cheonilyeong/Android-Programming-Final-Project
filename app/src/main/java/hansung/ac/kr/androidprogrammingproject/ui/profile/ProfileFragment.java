@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +48,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;     // ProfileFragment 바인딩
 
     private CircleImageView iv_profile;         // profile
-    private TextView tv_email;                 // e-mail
+    private TextView tv_email;                  // e-mail
     private TextView tv_nickname;               // nickname
     private TextView tv_information;            // information
 

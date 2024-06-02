@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AndroidProgrammingProject</string>
+    <string name="title_home">홈</string>
+    <string name="title_chatting">채팅</string>
+    <string name="title_profile">프로필</string>
 </resources>

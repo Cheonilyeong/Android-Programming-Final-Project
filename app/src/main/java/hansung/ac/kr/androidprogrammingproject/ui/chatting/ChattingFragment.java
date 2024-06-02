@@ -57,6 +57,18 @@ public class ChattingFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         roomListAdapter = new RoomListAdapter(roomDataset);
+        //
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트1"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트2"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트3"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트4"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트5"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트6"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트7"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트8"));
+        roomDataset.add(new RoomList("NzDYMezYpN3HDdTtdss", "zdGzqAU2Qkgciv2HAxmXGABgYfX2", "테스트9"));
+
+        //
         roomListAdapter.setOnItemClickListener(new RoomListAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(String room_id, String u_id) {
