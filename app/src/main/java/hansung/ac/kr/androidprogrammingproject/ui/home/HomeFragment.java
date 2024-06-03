@@ -15,22 +15,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.Firebase;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.databinding.FragmentHomeBinding;
-import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomList;
-import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomListAdapter;
 
 public class HomeFragment extends Fragment {
-
     
     private RecyclerView recyclerView;          // 리사이클러 뷰 
     private PostListAdapter postListAdapter;    // 어뎁터
@@ -38,6 +28,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<Post> postDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
     
     private FragmentHomeBinding binding;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("onCreate", "Home onCreate 호출됨");
@@ -79,8 +70,14 @@ public class HomeFragment extends Fragment {
         });
 
         homeViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
-            if(isLoading) { recyclerView.setVisibility(View.GONE); }
-            else { recyclerView.setVisibility(View.VISIBLE); }
+            if(isLoading) {
+                root.findViewById(R.id.progressbar).setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }
+            else {
+                root.findViewById(R.id.progressbar).setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         });
 
         return root;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,33 +7,34 @@
     android:orientation="vertical"
     tools:context=".RegisterActivity">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/baseline_arrow_back_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:orientation="horizontal" >
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/baseline_arrow_back_24"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="회원가입"
-            android:textAlignment="center"
-            android:textSize="40dp" />
-    </LinearLayout>
+        android:layout_height="50dp"
+        android:text="회원가입"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:orientation="vertical">
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_back">
 
         <TextView
             android:layout_width="match_parent"
@@ -41,14 +42,15 @@
             android:layout_marginTop="60dp"
             android:text="이메일"
             android:textSize="20dp" />
+
         <EditText
             android:id="@+id/et_e_mail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="textEmailAddress"
-            android:hint="이메일을 입력하세요" />
+            android:hint="이메일을 입력하세요"
+            android:inputType="textEmailAddress" />
 
         <TextView
             android:layout_width="match_parent"
@@ -56,6 +58,7 @@
             android:layout_marginTop="30dp"
             android:text="비밀번호"
             android:textSize="20dp" />
+
         <EditText
             android:id="@+id/et_passwd"
             android:layout_width="match_parent"
@@ -71,14 +74,15 @@
             android:layout_marginTop="30dp"
             android:text="닉네임"
             android:textSize="20dp" />
+
         <EditText
             android:id="@+id/et_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="text"
-            android:hint="닉네임을 입력하세요" />
+            android:hint="닉네임을 입력하세요"
+            android:inputType="text" />
 
         <TextView
             android:layout_width="match_parent"
@@ -86,14 +90,15 @@
             android:layout_marginTop="30dp"
             android:text="한 줄 소개"
             android:textSize="20dp" />
+
         <EditText
             android:id="@+id/et_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="text"
-            android:hint="한 줄 소개를 입력하세요"  />
+            android:hint="한 줄 소개를 입력하세요"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/btn_register"
@@ -105,4 +110,4 @@
             android:textSize="20dp" />
     </LinearLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -74,8 +74,14 @@ public class ChattingFragment extends Fragment {
         });
 
         chattingViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
-            if(isLoading) { recyclerView.setVisibility(View.GONE); }
-            else { recyclerView.setVisibility(View.VISIBLE); }
+            if(isLoading) {
+                root.findViewById(R.id.progressbar).setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }
+            else {
+                root.findViewById(R.id.progressbar).setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
         });
 
         return root;
