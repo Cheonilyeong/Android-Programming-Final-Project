@@ -25,7 +25,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;          // 리사이클러 뷰 
     private PostListAdapter postListAdapter;    // 어뎁터
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Post> postDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
     
     private FragmentHomeBinding binding;
 
@@ -62,7 +61,32 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         postListAdapter = new PostListAdapter();
+        postListAdapter.setOnItemClickListener(new PostListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClicked(Post post) {
+                Intent intent = new Intent(getActivity(), ShowPostActivity.class);
+                String u_id = post.getU_id();
+                String title = post.getTitle();
+                String kindOf = post.getKindOf();
+                String food = post.getFood();
+                String content = post.getContent();
+                String person = post.getPerson();
+                String day = post.getDay();
+                String time = post.getTime();
+                intent.putExtra("u_id", u_id);
+                intent.putExtra("title", title);
+                intent.putExtra("kindOf", kindOf);
+                intent.putExtra("food", food);
+                intent.putExtra("content", content);
+                intent.putExtra("person", person);
+                intent.putExtra("day", day);
+                intent.putExtra("time", time);
+                startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(postListAdapter);
+
+
 
         // 데이터 관찰 및 로딩 상태 처리
         homeViewModel.getPostDataset().observe(getViewLifecycleOwner(), posts -> {
@@ -83,6 +107,24 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
+    public void intentPutExtra(Intent intent, Post post) {
+        String u_id = post.getU_id();
+        String title = post.getTitle();
+        String kindOf = post.getKindOf();
+        String food = post.getFood();
+        String content = post.getContent();
+        String person = post.getPerson();
+        String day = post.getDay();
+        String time = post.getTime();
+        intent.putExtra("u_id", u_id);
+        intent.putExtra("title", title);
+        intent.putExtra("kindOf", kindOf);
+        intent.putExtra("food", food);
+        intent.putExtra("content", content);
+        intent.putExtra("person", person);
+        intent.putExtra("day", day);
+        intent.putExtra("time", time);
+    }
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Log.d("onViewCreated", "Home onViewCreated 호출됨");

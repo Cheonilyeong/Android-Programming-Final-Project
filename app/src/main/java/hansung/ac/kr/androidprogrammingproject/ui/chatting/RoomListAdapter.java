@@ -80,6 +80,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
                 }
             }
         });
+
         return viewHolder;
     }
 

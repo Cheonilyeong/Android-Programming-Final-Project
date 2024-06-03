@@ -55,6 +55,12 @@
             android:exported="false" >
         </activity>
 
+        <!-- showpostActivity -->
+        <activity
+            android:name=".ui.home.ShowPostActivity"
+            android:exported="false" >
+        </activity>
+
     </application>
 
 </manifest>

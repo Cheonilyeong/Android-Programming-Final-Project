@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.UserAccount;
+import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomListAdapter;
 
 
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
@@ -27,6 +29,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     private FirebaseDatabase database;             // 데이터베이스 인스턴스
     private DatabaseReference databaseRef;         // 데이터베이스 레퍼런스
 
+    private OnItemClickListener itemClickListener; // OnItemClickListener
     private List<Post> dataList;                   // PostList
 
     public PostListAdapter() {
@@ -54,6 +57,18 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         // 새로운 뷰 생성
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.post, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
+
+        // setOnClickListener
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = viewHolder.getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {                 // 유효한 위치인지 확인
+                    Post post = dataList.get(position);
+                    itemClickListener.onItemClicked(post);
+                }
+            }
+        });
 
         return viewHolder;
     }
@@ -89,4 +104,12 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    // OnItemClickListener 인터페이스 선언
+    public interface OnItemClickListener {
+        void onItemClicked(Post post);
+    }
+    // OnItemClickListener 전달 메소드
+    public void setOnItemClickListener (OnItemClickListener listener) {
+        itemClickListener = listener;
+    }
 }
