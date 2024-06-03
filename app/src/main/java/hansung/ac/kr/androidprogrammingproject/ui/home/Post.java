@@ -2,6 +2,7 @@ package hansung.ac.kr.androidprogrammingproject.ui.home;
 
 public class Post {
 
+    private String post_id;
     private String u_id;
     private String title;
     private String kindOf;
@@ -23,6 +24,8 @@ public class Post {
         this.time = time;
     }
 
+    public String getPost_id() { return post_id; }
+    public void setPost_id(String post_id) { this.post_id = post_id; }
     public String getU_id() { return u_id; }
     public void setU_id(String u_id) { this.u_id = u_id;}
     public String getTitle() { return title; }

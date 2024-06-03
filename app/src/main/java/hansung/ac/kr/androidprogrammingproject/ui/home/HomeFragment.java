@@ -65,27 +65,20 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClicked(Post post) {
                 Intent intent = new Intent(getActivity(), ShowPostActivity.class);
-                String u_id = post.getU_id();
-                String title = post.getTitle();
-                String kindOf = post.getKindOf();
-                String food = post.getFood();
-                String content = post.getContent();
-                String person = post.getPerson();
-                String day = post.getDay();
-                String time = post.getTime();
-                intent.putExtra("u_id", u_id);
-                intent.putExtra("title", title);
-                intent.putExtra("kindOf", kindOf);
-                intent.putExtra("food", food);
-                intent.putExtra("content", content);
-                intent.putExtra("person", person);
-                intent.putExtra("day", day);
-                intent.putExtra("time", time);
+                // 값 넘겨주기
+                intent.putExtra("post_id", post.getPost_id());
+                intent.putExtra("u_id", post.getU_id());
+                intent.putExtra("title", post.getTitle());
+                intent.putExtra("kindOf", post.getKindOf());
+                intent.putExtra("food", post.getFood());
+                intent.putExtra("content", post.getContent());
+                intent.putExtra("person", post.getPerson());
+                intent.putExtra("day", post.getDay());
+                intent.putExtra("time", post.getTime());
                 startActivity(intent);
             }
         });
         recyclerView.setAdapter(postListAdapter);
-
 
 
         // 데이터 관찰 및 로딩 상태 처리
@@ -107,24 +100,6 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    public void intentPutExtra(Intent intent, Post post) {
-        String u_id = post.getU_id();
-        String title = post.getTitle();
-        String kindOf = post.getKindOf();
-        String food = post.getFood();
-        String content = post.getContent();
-        String person = post.getPerson();
-        String day = post.getDay();
-        String time = post.getTime();
-        intent.putExtra("u_id", u_id);
-        intent.putExtra("title", title);
-        intent.putExtra("kindOf", kindOf);
-        intent.putExtra("food", food);
-        intent.putExtra("content", content);
-        intent.putExtra("person", person);
-        intent.putExtra("day", day);
-        intent.putExtra("time", time);
-    }
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         Log.d("onViewCreated", "Home onViewCreated 호출됨");

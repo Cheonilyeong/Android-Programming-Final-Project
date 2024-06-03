@@ -90,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                             databaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
 
                             Toast.makeText(RegisterActivity.this, "회원가입 성공", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                         // 회원가입 실패
                         else {

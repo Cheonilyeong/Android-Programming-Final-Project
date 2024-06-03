@@ -7,11 +7,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomActivity;
 
 public class ShowPostActivity extends AddPostActivity{
 
+    private FirebaseDatabase database;              // 데이터베이스 인스턴스
+    private DatabaseReference databaseRef;          // 데이터베이스 레퍼런스
+
+    private String post_id;
     private String u_id;
     private String title;
     private String kindOf;
@@ -31,6 +38,7 @@ public class ShowPostActivity extends AddPostActivity{
         setContentView(R.layout.activity_showpost);
 
         Intent intent = getIntent();
+        String post_id = intent.getStringExtra("post_id");
         String u_id = intent.getStringExtra("u_id");
         String title = intent.getStringExtra("title");
         String kindOf = intent.getStringExtra("kindOf");
@@ -84,11 +92,7 @@ public class ShowPostActivity extends AddPostActivity{
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ShowPostActivity.this, RoomActivity.class);
-                // 이미 채팅 방에 속해있는지
-
-                // 방은 포스트에 매칭시켜 하나씩
-
-                // 내가 작성자라면?
+                intent.putExtra("room_id", post_id);
                 startActivity(intent);
             }
         });

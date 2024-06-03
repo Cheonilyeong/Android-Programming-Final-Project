@@ -59,10 +59,9 @@ public class ChattingFragment extends Fragment {
         roomListAdapter = new RoomListAdapter();
         roomListAdapter.setOnItemClickListener(new RoomListAdapter.OnItemClickListener() {
             @Override
-            public void onItemClicked(String room_id, String u_id) {
+            public void onItemClicked(String room_id) {
                 Intent intent = new Intent(getActivity(), RoomActivity.class);
                 intent.putExtra("room_id", room_id);
-                intent.putExtra("u_id", u_id);
                 startActivity(intent);
             }
         });

@@ -52,9 +52,8 @@ public class RoomActivity extends AppCompatActivity {
     private ImageView iv_back;                  // 뒤로 가기 버튼
     private TextView tv_nickname;               // 대화 상대 nickname
 
-    private String room_id;                     // 대화 방 room_id
-    private String u_id;                        // 대화 상대 u_id
-    private String nickname;                    // 대화 상대 nickname
+    private String room_id;                     // 게시물 채팅 방 room_id (post_id)
+    private String u_id;                        // 게시물 채팅 방장(작성자) u_id
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,30 +79,14 @@ public class RoomActivity extends AppCompatActivity {
             }
         });
 
-        // Get room_id & u_id
+        // Get room_id
         Intent intent = getIntent();
         room_id = intent.getStringExtra("room_id");
-        u_id = intent.getStringExtra("u_id");
-        Log.d("Enter Room", "Room_id: " + room_id + " u_id: " + u_id);
+        Log.d("Enter Room", "Room_id: " + room_id);
 
-        // Room 상대방 nickname, imageURL 구하기
-        tv_nickname = findViewById(R.id.tv_nickname);
 
+        // 채팅 방 대화 가져오기
         database = FirebaseDatabase.getInstance();
-        databaseRef = database.getReference("project").child("UserAccount").child(u_id);
-
-        databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UserAccount userAccount = snapshot.getValue(UserAccount.class);
-                nickname = userAccount.getNickName();
-                tv_nickname.setText(nickname);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-        //
-
         databaseRef = database.getReference("project").child("Room").child(room_id);
 
         databaseRef.addChildEventListener(new ChildEventListener() {
@@ -132,10 +115,10 @@ public class RoomActivity extends AppCompatActivity {
                 if(msg.equals("") || msg.trim().equals("")) return;
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-                Message message = new Message(msg, LoginActivity.u_id, timeStamp);
+                Message message = new Message(3, msg, LoginActivity.u_id, timeStamp);
                 databaseRef = database.getReference("project").child("Room").child(room_id);
                 databaseRef.push().setValue(message);
-                lastMessage(message.getMessage());
+                // lastMessage(message.getMessage());
 
                 et_msg.setText("");
             }
@@ -144,10 +127,10 @@ public class RoomActivity extends AppCompatActivity {
 
     // lastMessage 수정
     public void lastMessage(String msg) {
-        databaseRef = database.getReference("project").child("UsersRoom").child(u_id);
-        databaseRef.child(room_id).child("lastMessage").setValue(msg);
-
-        databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id);
-        databaseRef.child(room_id).child("lastMessage").setValue(msg);
+//        databaseRef = database.getReference("project").child("UsersRoom").child(u_id);
+//        databaseRef.child(room_id).child("lastMessage").setValue(msg);
+//
+//        databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id);
+//        databaseRef.child(room_id).child("lastMessage").setValue(msg);
     }
 }
