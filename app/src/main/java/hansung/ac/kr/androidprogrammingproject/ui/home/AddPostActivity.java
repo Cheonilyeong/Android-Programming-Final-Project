@@ -25,12 +25,12 @@ import java.util.Locale;
 import hansung.ac.kr.androidprogrammingproject.LoginActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
 
-public class PostingActivity extends AppCompatActivity {
+public class AddPostActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_posting);
+        setContentView(R.layout.activity_addpost);
 
         ImageView iv_back = findViewById(R.id.iv_back);
         EditText et_title = findViewById(R.id.et_title);
@@ -56,8 +56,8 @@ public class PostingActivity extends AppCompatActivity {
         btn_showDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View dialogView = View.inflate(PostingActivity.this, R.layout.dialog_day, null);
-                AlertDialog.Builder dlg = new AlertDialog.Builder(PostingActivity.this);
+                View dialogView = View.inflate(AddPostActivity.this, R.layout.dialog_day, null);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(AddPostActivity.this);
                 dlg.setView(dialogView);
 
                 final AlertDialog dialog = dlg.create();
@@ -96,8 +96,8 @@ public class PostingActivity extends AppCompatActivity {
         btn_showTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View dialogView = View.inflate(PostingActivity.this, R.layout.dialog_time, null);
-                AlertDialog.Builder dlg = new AlertDialog.Builder(PostingActivity.this);
+                View dialogView = View.inflate(AddPostActivity.this, R.layout.dialog_time, null);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(AddPostActivity.this);
                 dlg.setView(dialogView);
 
                 final AlertDialog dialog = dlg.create();
@@ -137,12 +137,12 @@ public class PostingActivity extends AppCompatActivity {
                 // 제목 확인
                 String str_et_title = et_title.getText().toString();
                 if(str_et_title.equals("") || str_et_title.trim().equals("")) {
-                    Toast.makeText(PostingActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPostActivity.this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // 분야 확인
                 if(rg.getCheckedRadioButtonId() == -1) {
-                    Toast.makeText(PostingActivity.this, "분야를 선택하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPostActivity.this, "분야를 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String str_rb_checked = "";
@@ -152,37 +152,37 @@ public class PostingActivity extends AppCompatActivity {
                 // 음식 확인
                 String str_et_food = et_food.getText().toString();
                 if(str_et_food.equals("") || str_et_food.trim().equals("")) {
-                    Toast.makeText(PostingActivity.this, "음식을 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPostActivity.this, "음식을 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // 본문 확인
                 String str_et_content = et_content.getText().toString();
                 if(str_et_content.equals("") || str_et_content.trim().equals("")) {
-                    Toast.makeText(PostingActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPostActivity.this, "내용을 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // 인원 확인
                 if(sp_person.getSelectedItemPosition() == 0) {
-                    Toast.makeText(PostingActivity.this, "인원을 선택하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPostActivity.this, "인원을 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String str_sp_person = sp_person.getSelectedItem().toString();
                 // 날짜 확인
                 String str_tv_day = tv_day.getText().toString();
                 if(str_tv_day.equals("")) {
-                    Toast.makeText(PostingActivity.this, "날짜를 선택하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPostActivity.this, "날짜를 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // 시간 확인
                 String str_tv_time = tv_time.getText().toString();
                 if(str_tv_time.equals("")) {
-                    Toast.makeText(PostingActivity.this, "시간을 선택하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddPostActivity.this, "시간을 선택하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 // 등록 글 올리기
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference databaseRef = database.getReference("project").child("post");
+                DatabaseReference databaseRef = database.getReference("project").child("Post");
 
                 Post post = new Post(LoginActivity.u_id, str_et_title, str_rb_checked, str_et_food, str_et_content, str_sp_person, str_tv_day, str_tv_time);
                 databaseRef.push().setValue(post);

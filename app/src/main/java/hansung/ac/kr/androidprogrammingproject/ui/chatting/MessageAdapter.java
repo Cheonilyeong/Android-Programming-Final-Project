@@ -1,5 +1,6 @@
 package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         // 데이터를 뷰 홀더의 뷰에 바인딩
         Message dataModel = dataList.get(position);
 
-        //holder.tv_nickname.setText("nickname");
         holder.tv_msg.setText(dataModel.getMessage());
-        
+
+        Log.d("u_id", dataModel.getU_id());
+        Log.d("LoginActivity.u_id", LoginActivity.u_id);
         // 내가 쓴 Message면 오른쪽에 배치
         if(dataModel.getU_id().equals(LoginActivity.u_id)) {
             holder.tv_msg.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);

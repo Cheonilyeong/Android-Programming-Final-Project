@@ -12,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,9 +23,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.UserAccount;
+import hansung.ac.kr.androidprogrammingproject.ui.home.Post;
 
 public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHolder> {
 
@@ -37,10 +37,10 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     private StorageReference storageRef;           // 스토리지 레퍼런스
 
     private OnItemClickListener itemClickListener; // OnItemClickListener
-    ArrayList<RoomList> dataList;                  // RoomList
+    private List<RoomList> dataList;                  // RoomList
 
-    public RoomListAdapter(ArrayList<RoomList> dataList) {
-        this.dataList = dataList;
+    public RoomListAdapter() {
+        dataList = new ArrayList<>();
     }
 
     // ViewHolder 클래스 정의
@@ -57,11 +57,11 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         }
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // 새로운 뷰 생성
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.room_list, parent, false);
-
         ViewHolder viewHolder = new ViewHolder(view);
 
         // setOnClickListener
@@ -84,7 +84,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RoomList dataModel = dataList.get(position);
         // Room 상대방 nickname, imageURL 구하기
         String u_id = dataModel.getU_id();
@@ -97,7 +97,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserAccount userAccount = snapshot.getValue(UserAccount.class);
                 // 데이터를 뷰 홀더의 뷰에 바인딩
-                downloadImage(holder, userAccount.getImageURL());
+                if(!userAccount.getImageURL().equals("")) downloadImage(holder, userAccount.getImageURL());
                 holder.tv_nickname.setText(userAccount.getNickName());
                 holder.tv_lastMessage.setText(dataModel.getLastMessage());
             }
@@ -122,7 +122,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
             public void onFailure(@NonNull Exception exception) {
                 // URL을 가져오는 데 실패했을 때
                 // 기본사진으로
-                loadImageIntoImageView(holder, "/profile/NULL.jpg");
+                // loadImageIntoImageView(holder, "/profile/NULL.jpg");
             }
         });
     }
@@ -137,18 +137,9 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     public int getItemCount() {
         return dataList.size();
     }
-    public void addChattingRoom(RoomList roomList) {
-        dataList.add(roomList);
-        notifyItemInserted(dataList.size()-1);
-    }
-    public void changeLastMessage(RoomList roomList) {
-        for(int i = 0; i < dataList.size(); i++) {
-            if (dataList.get(i).getRoom_id().equals(roomList.getRoom_id())) {
-                dataList.get(i).setLastMessage(roomList.getLastMessage());
-                notifyItemChanged(i);
-            }
-            break;
-        }
+    public void setRoomList(List<RoomList> RoomList) {
+        this.dataList = RoomList;
+        notifyDataSetChanged();
     }
 
     // OnItemClickListener 인터페이스 선언

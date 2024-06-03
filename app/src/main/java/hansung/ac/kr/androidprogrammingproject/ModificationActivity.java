@@ -41,8 +41,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ModificationActivity extends Activity {
 
     private final int PICK_IMAGE_REQUEST = 1;
+    private final int STAY = 1;
+    private final int MODIFIED = 2;
+    private final int BASIC = 3;
     private Uri selectedImageUri = null;
-    private String uploadedImageUri = null;
+    private int imageState = STAY;
     private String imageURL;
 
     private FirebaseDatabase database;          // 데이터베이스 인스턴스
@@ -89,8 +92,7 @@ public class ModificationActivity extends Activity {
         btn_basicImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectedImageUri = null;
-                uploadedImageUri = null;
+                imageState = 3;
                 iv_profile.setImageResource(R.drawable.basicimage);
             }
         });
@@ -119,7 +121,7 @@ public class ModificationActivity extends Activity {
                 UserAccount userAccount = snapshot.getValue(UserAccount.class);
                 imageURL = userAccount.getImageURL();
                 Log.d("imageURL", imageURL);
-                if(!imageURL.equals("/profile/NULL.jpg")) downloadImage(imageURL);
+                if(!imageURL.equals("")) downloadImage(imageURL);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -128,11 +130,12 @@ public class ModificationActivity extends Activity {
 
     // 이미지 업로드 (스토리지에서 고르기)
     private void uploadImage() {
-        if(selectedImageUri == null) return;
+        if(imageState == STAY) return;
+        if(imageState == BASIC) return;
 
         // Storage 참조 생성
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        StorageReference fileReference = storageReference.child("profile/" + uploadedImageUri + ".jpg");
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference().child("profile/" + LoginActivity.u_id + ".jpg");
 
         try {
             // 파일이 존재하는지 확인하기 위해 InputStream 열기
@@ -141,12 +144,12 @@ public class ModificationActivity extends Activity {
                 inputStream.close();
 
                 // 업로드 작업 시작
-                fileReference.putFile(selectedImageUri)
+                storageRef.putFile(selectedImageUri)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 // 업로드 성공 시
-                                Log.d("putFile", "Upload Success: " + uploadedImageUri);
+                                // Log.d("putFile", "Upload Success: ");
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -187,8 +190,8 @@ public class ModificationActivity extends Activity {
 
                         account.setNickName(et_nickname.getText().toString());
                         account.setInformation(et_information.getText().toString());
-                        if(uploadedImageUri != null) account.setImageURL("/profile/" + uploadedImageUri + ".jpg");
-                        else account.setImageURL("/profile/NULL.jpg");
+                        if(imageState == MODIFIED) account.setImageURL("/profile/" + LoginActivity.u_id + ".jpg");
+                        if(imageState == BASIC) account.setImageURL("");
                         // 다시 저장
                         databaseRef.child(currentUserId).setValue(account);
                     }
@@ -216,7 +219,7 @@ public class ModificationActivity extends Activity {
         // Image 선택의 경우면
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
-            uploadedImageUri = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            imageState = MODIFIED;
             // Image 바꾸기 (아직 서버에 저장은 X)
             iv_profile.setImageURI(selectedImageUri);
         }
@@ -237,7 +240,7 @@ public class ModificationActivity extends Activity {
             public void onFailure(@NonNull Exception exception) {
                 // URL을 가져오는 데 실패했을 때
                 // 기본사진으로
-                loadImageIntoImageView("/profile/NULL.jpg");
+                // loadImageIntoImageView("/profile/NULL.jpg");
             }
         });
     }

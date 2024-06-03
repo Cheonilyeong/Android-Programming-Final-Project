@@ -51,12 +51,10 @@ public class RoomActivity extends AppCompatActivity {
 
     private ImageView iv_back;                  // 뒤로 가기 버튼
     private TextView tv_nickname;               // 대화 상대 nickname
-    private ImageView iv_profile;               // 대화 상대 profile
 
     private String room_id;                     // 대화 방 room_id
     private String u_id;                        // 대화 상대 u_id
     private String nickname;                    // 대화 상대 nickname
-    private String imageURL;                    // 대화 상대 imageURL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

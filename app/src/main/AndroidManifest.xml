@@ -49,9 +49,9 @@
             android:exported="false" />
         <!-- mainActivity -->
 
-        <!-- postingActivity -->
+        <!-- addpostActivity -->
         <activity
-            android:name=".ui.home.PostingActivity"
+            android:name=".ui.home.AddPostActivity"
             android:exported="false" >
         </activity>
 

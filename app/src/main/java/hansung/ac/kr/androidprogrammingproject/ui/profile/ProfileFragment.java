@@ -51,9 +51,19 @@ public class ProfileFragment extends Fragment {
     private TextView tv_email;                  // e-mail
     private TextView tv_nickname;               // nickname
     private TextView tv_information;            // information
-
+    
+    private Button btn_modification;            // 프로필 수정 버튼
+    private Button btn_logout;                  // 로그아웃 버튼
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.d("onCreate", "Profile onCreate 호출됨");
+        super.onCreate(savedInstanceState);
+    }
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Log.d("onCreateView", "Profile onCreateView 호출됨");
+
         ProfileViewModel profileViewModel =
                 new ViewModelProvider(this).get(ProfileViewModel.class);
         // ProfileFragment 바인딩
@@ -94,7 +104,7 @@ public class ProfileFragment extends Fragment {
                         // 예: 화면에 사용자 정보를 표시
                         Log.d("UserInfo", "Email: " + email + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageURL);
 
-                        if(imageURL.equals("NULL")) iv_profile.setImageResource(R.drawable.basicimage);
+                        if(imageURL.equals("")) iv_profile.setImageResource(R.drawable.basicimage);
                         else downloadImage(imageURL);
                         tv_email.setText(email);
                         tv_nickname.setText(nickname);
@@ -110,7 +120,7 @@ public class ProfileFragment extends Fragment {
         else Log.w("Profile", "No FirebaseUser");
 
         // 정보 수정으로 이동
-        Button btn_modification = root.findViewById(R.id.btn_modification);
+        btn_modification = root.findViewById(R.id.btn_modification);
         btn_modification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,8 +130,8 @@ public class ProfileFragment extends Fragment {
         });
 
         // 로그아웃 버튼
-        Button btnLogout = root.findViewById(R.id.btn_logout);
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        btn_logout = root.findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 firebaseAuth.signOut();
@@ -144,13 +154,15 @@ public class ProfileFragment extends Fragment {
                 // 다운로드 URL이 성공적으로 가져왔으면
                 // 이미지의 URL 가져오기
                 loadImageIntoImageView(uri.toString());
+                Log.d("downloadImage", "downloadImage onSuccess");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // URL을 가져오는 데 실패했을 때
                 // 기본사진으로
-                loadImageIntoImageView("/profile/NULL.jpg");
+                iv_profile.setImageResource(R.drawable.basicimage);
+                Log.e("downloadImage", "downloadImage onFailure");
             }
         });
     }
@@ -159,6 +171,17 @@ public class ProfileFragment extends Fragment {
         Glide.with(this)
                 .load(imageUrl)
                 .into(iv_profile);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        Log.d("onViewCreated", "Profile onViewCreated 호출됨");
+        super.onViewCreated(view ,savedInstanceState);
+    }
+    @Override
+    public void onStart() {
+        Log.d("onStart", "Profile onStart 호출됨");
+        super.onStart();
     }
     @Override
     public void onDestroyView() {
