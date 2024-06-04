@@ -1,5 +1,7 @@
 package hansung.ac.kr.androidprogrammingproject.ui.home;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -62,8 +64,10 @@ public class HomeViewModel extends ViewModel {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Post post = snapshot.getValue(Post.class);
                 List<Post> posts;
+
                 if(postDataset.getValue() == null) posts = new ArrayList<>();
                 else posts = postDataset.getValue();
+
                 posts.add(post);
                 postDataset.setValue(posts);
                 isLoading.setValue(false);
@@ -71,10 +75,10 @@ public class HomeViewModel extends ViewModel {
             // 게시물 수정
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                if(snapshot.getValue() == null) return;
+
                 Post post = snapshot.getValue(Post.class);
-                List<Post> posts;
-                if(postDataset.getValue() == null) posts = new ArrayList<>();
-                else posts = postDataset.getValue();
+                List<Post> posts = postDataset.getValue();
 
                 for(int i = 0; i < posts.size(); i++) {
                     if(posts.get(i).getPost_id().equals(post.getPost_id())) {
@@ -86,7 +90,20 @@ public class HomeViewModel extends ViewModel {
                 isLoading.setValue(false);
             }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+                List<Post> posts = postDataset.getValue();
+
+                for(int i = 0; i < posts.size(); i++) {
+                    if(posts.get(i).getPost_id().equals(post.getPost_id())) {
+                        posts.remove(i);
+                        break;
+                    }
+                }
+
+                postDataset.setValue(posts);
+                isLoading.setValue(false);
+            }
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
             @Override

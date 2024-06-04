@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import hansung.ac.kr.androidprogrammingproject.LoginActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
@@ -62,6 +67,8 @@ public class ShowPostActivity extends AddPostActivity{
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null) return;
+
                 Post post = snapshot.getValue(Post.class);
                 tv_title.setText(post.getTitle());
                 tv_kindOf.setText(post.getKindOf());
@@ -90,14 +97,66 @@ public class ShowPostActivity extends AddPostActivity{
                 }
             });
 
-
             // 삭제 버튼
             iv_delete = findViewById(R.id.iv_delete);
             iv_delete.setVisibility(View.VISIBLE);
             iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // 삭제
+                    View dialogView = View.inflate(ShowPostActivity.this, R.layout.dialog_delete, null);
+                    AlertDialog.Builder dlg = new AlertDialog.Builder(ShowPostActivity.this);
+                    dlg.setView(dialogView);
+
+                    final AlertDialog dialog = dlg.create();
+
+                    Button btn_no = dialogView.findViewById(R.id.btn_no);
+                    btn_no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    Button btn_yes = dialogView.findViewById(R.id.btn_yes);
+                    btn_yes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            // Post 삭제
+                            databaseRef = database.getReference("project").child("Post").child(post_id);
+                            databaseRef.removeValue();
+                            // Room 삭제
+                            databaseRef = database.getReference("project").child("Room").child(post_id);
+                            databaseRef.removeValue();
+                            // RoomUsers에 있는 유저 UsersRoom에서 삭제 후 RoomUsers 삭제
+                            databaseRef = database.getReference("project").child("RoomUsers").child(post_id);
+                            databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    ArrayList<String> u_idList = new ArrayList<>();
+                                    for(DataSnapshot childSnapshot : snapshot.getChildren()) {
+                                        String u_id = childSnapshot.getValue(String.class);
+                                        u_idList.add(u_id);
+                                    }
+
+                                    for(String u_id : u_idList) {
+                                        databaseRef = database.getReference("project").child("UsersRoom").child(u_id);
+                                        databaseRef.removeValue();
+                                    }
+
+                                    databaseRef = database.getReference("project").child("RoomUsers").child(post_id);
+                                    databaseRef.removeValue();
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {}
+                            });
+
+                            dialog.cancel();
+                            finish();
+                        }
+                    });
+
+                    dialog.show();
                 }
             });
         }
@@ -149,7 +208,7 @@ public class ShowPostActivity extends AddPostActivity{
                             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                             RoomList roomList = new RoomList(post_id, timeStamp, "");
                             databaseRef = database.getReference("project").child("UsersRoom");
-                            databaseRef.child(LoginActivity.u_id).push().setValue(roomList);
+                            databaseRef.child(LoginActivity.u_id).child(post_id).setValue(roomList);
 
                             // 방에 입장하고 입장 메세지 전달
                             Message message = new Message(1, "님이 입장하였습니다.", LoginActivity.u_id, timeStamp);

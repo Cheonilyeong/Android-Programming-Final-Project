@@ -68,18 +68,20 @@ public class ChattingViewModel extends ViewModel {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 RoomList room = snapshot.getValue(RoomList.class);
                 List<RoomList> roomList;
+
                 if(roomListDataset.getValue() == null) roomList = new ArrayList<>();
                 else roomList = roomListDataset.getValue();
                 roomList.add(room);
+
                 roomListDataset.setValue(roomList);
                 isLoading.setValue(false);
             }
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                if(snapshot.getValue() == null) return;
+
                 RoomList room = snapshot.getValue(RoomList.class);
-                List<RoomList> roomList;
-                if(roomListDataset.getValue() == null) roomList = new ArrayList<>();
-                else roomList = roomListDataset.getValue();
+                List<RoomList> roomList = roomListDataset.getValue();
 
                 for(int i = 0; i < roomList.size(); i++) {
                     if(roomList.get(i).getRoom_id().equals(room.getRoom_id())) {
@@ -93,9 +95,7 @@ public class ChattingViewModel extends ViewModel {
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
                 RoomList room = snapshot.getValue(RoomList.class);
-                List<RoomList> roomList;
-                if(roomListDataset.getValue() == null) roomList = new ArrayList<>();
-                else roomList = roomListDataset.getValue();
+                List<RoomList> roomList = roomListDataset.getValue();
 
                 roomList.remove(room);
 
