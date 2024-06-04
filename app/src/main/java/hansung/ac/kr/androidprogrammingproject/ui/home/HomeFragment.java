@@ -68,13 +68,6 @@ public class HomeFragment extends Fragment {
                 // 값 넘겨주기
                 intent.putExtra("post_id", post.getPost_id());
                 intent.putExtra("u_id", post.getU_id());
-                intent.putExtra("title", post.getTitle());
-                intent.putExtra("kindOf", post.getKindOf());
-                intent.putExtra("food", post.getFood());
-                intent.putExtra("content", post.getContent());
-                intent.putExtra("person", post.getPerson());
-                intent.putExtra("day", post.getDay());
-                intent.putExtra("time", post.getTime());
                 startActivity(intent);
             }
         });

@@ -31,17 +31,10 @@ public class ShowPostActivity extends AddPostActivity{
     private FirebaseDatabase database;              // 데이터베이스 인스턴스
     private DatabaseReference databaseRef;          // 데이터베이스 레퍼런스
 
-    private String post_id;
-    private String u_id;
-    private String title;
-    private String kindOf;
-    private String food;
-    private String content;
-    private String preson;
-    private String day;
-    private String time;
+    private String post_id;                         // 현재 게시물
+    private String u_id;                            // 현재 게시물 작성자
 
-    private ImageView iv_back;
+    private ImageView iv_back, iv_edit, iv_delete;
     private TextView tv_title, tv_kindOf, tv_food, tv_person, tv_day, tv_time, tv_chatting;
     private EditText et_content;
 
@@ -51,16 +44,63 @@ public class ShowPostActivity extends AddPostActivity{
         setContentView(R.layout.activity_showpost);
 
         Intent intent = getIntent();
-        String post_id = intent.getStringExtra("post_id");
-        String u_id = intent.getStringExtra("u_id");
-        String title = intent.getStringExtra("title");
-        String kindOf = intent.getStringExtra("kindOf");
-        String food = intent.getStringExtra("food");
-        String day = intent.getStringExtra("day");
-        String time = intent.getStringExtra("time");
-        String content = intent.getStringExtra("content");
-        String person = intent.getStringExtra("person");
-        // Log.d("showpost 입장", post_id);
+        post_id = intent.getStringExtra("post_id");
+        u_id = intent.getStringExtra("u_id");
+
+        tv_title = findViewById(R.id.tv_title);
+        tv_kindOf = findViewById(R.id.tv_kindOf);
+        tv_food = findViewById(R.id.tv_food);
+        tv_day = findViewById(R.id.tv_day);
+        tv_time = findViewById(R.id.tv_time);
+        et_content = findViewById(R.id.et_content);
+        tv_person = findViewById(R.id.tv_person);
+
+        // 게시물 정보 가져오기
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("project").child("Post").child(post_id);
+
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+                tv_title.setText(post.getTitle());
+                tv_kindOf.setText(post.getKindOf());
+                tv_food.setText(post.getFood());
+                tv_day.setText(post.getDay());
+                tv_time.setText(post.getTime());
+                et_content.setText(post.getContent());
+                tv_person.setText(post.getPerson());
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
+        // 내가 작성한 게시물인지
+        if(u_id.equals(LoginActivity.u_id)) {
+            // 수정 버튼
+            iv_edit = findViewById(R.id.iv_edit);
+            iv_edit.setVisibility(View.VISIBLE);
+            iv_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 수정
+                    Intent intent = new Intent(ShowPostActivity.this, EditPostActivity.class);
+                    intent.putExtra("post_id", post_id);
+                    startActivity(intent);
+                }
+            });
+
+
+            // 삭제 버튼
+            iv_delete = findViewById(R.id.iv_delete);
+            iv_delete.setVisibility(View.VISIBLE);
+            iv_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 삭제
+                }
+            });
+        }
 
         // 뒤로 가기 버튼
         iv_back = findViewById(R.id.iv_back);
@@ -70,34 +110,6 @@ public class ShowPostActivity extends AddPostActivity{
                 finish();
             }
         });
-
-        // 제목
-        tv_title = findViewById(R.id.tv_title);
-        tv_title.setText(title);
-
-        // 분야
-        tv_kindOf = findViewById(R.id.tv_kindOf);
-        tv_kindOf.setText(kindOf);
-
-        // 음식
-        tv_food = findViewById(R.id.tv_food);
-        tv_food.setText(food);
-
-        // 날짜
-        tv_day = findViewById(R.id.tv_day);
-        tv_day.setText(day);
-
-        // 시간
-        tv_time = findViewById(R.id.tv_time);
-        tv_time.setText(time);
-
-        // 본문
-        et_content = findViewById(R.id.et_content);
-        et_content.setText(content);
-
-        // 인원
-        tv_person = findViewById(R.id.tv_person);
-        tv_person.setText(person);
 
         // 채팅하러 가기
         tv_chatting = findViewById(R.id.tv_chatting);
@@ -148,13 +160,11 @@ public class ShowPostActivity extends AddPostActivity{
                                     startActivity(intent);
                                 }
                             });
-
                         }
                         else {
                             startActivity(intent);
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {}
                 });

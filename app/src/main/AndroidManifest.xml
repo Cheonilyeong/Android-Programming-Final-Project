@@ -55,6 +55,12 @@
             android:exported="false" >
         </activity>
 
+        <!-- editpostActivity -->
+        <activity
+            android:name=".ui.home.EditPostActivity"
+            android:exported="false" >
+        </activity>
+
         <!-- showpostActivity -->
         <activity
             android:name=".ui.home.ShowPostActivity"

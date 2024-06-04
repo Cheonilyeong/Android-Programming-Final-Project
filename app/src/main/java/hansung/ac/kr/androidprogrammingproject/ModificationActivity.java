@@ -102,6 +102,19 @@ public class ModificationActivity extends Activity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // nickname, information 입력했는지
+                String str_et_nickname = et_nickname.getText().toString();
+                String str_et_information = et_information.getText().toString();
+
+                if(str_et_nickname.equals("") || str_et_nickname.trim().equals("")) {
+                    Toast.makeText(getApplicationContext(), "닉네임을 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(str_et_information.equals("") || str_et_information.trim().equals("")) {
+                    Toast.makeText(getApplicationContext(), "한 줄 소개를 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // 이미지 업로드
                 uploadImage();
                 save();

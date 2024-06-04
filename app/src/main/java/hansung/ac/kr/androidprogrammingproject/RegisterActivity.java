@@ -3,11 +3,13 @@ package hansung.ac.kr.androidprogrammingproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText et_email, et_passwd;        // 회원가입 e_mail, 회원가입 passwd
     private EditText et_nickname, et_information; // 회원가입 nickname, 회원가입 information
 
+    private ImageView iv_back;              // 뒤로 가기 버튼
     private Button btnRegister;             // 회원 가입 버튼
 
     @Override
@@ -44,11 +47,22 @@ public class RegisterActivity extends AppCompatActivity {
         et_nickname = findViewById(R.id.et_nickname);
         et_information = findViewById(R.id.et_information);
 
+        // 뒤로 가기 버튼
+        iv_back = findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         // 회원가입 버튼
         btnRegister = findViewById(R.id.btn_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 String email = et_email.getText().toString();
                 String passwd = et_passwd.getText().toString();
                 String nickname = et_nickname.getText().toString();
@@ -95,10 +109,8 @@ public class RegisterActivity extends AppCompatActivity {
                         // 회원가입 실패
                         else {
                             // 오류 메시지 출력
-                            // 비밀번호가 6글자 아래면 오류가 뜨더라
                             String errorCode = task.getException().getMessage();
-                            Log.e("FirebaseAuth", "회원가입 실패: " + errorCode);
-                            Toast.makeText(RegisterActivity.this, "회원가입 실패", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, errorCode, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

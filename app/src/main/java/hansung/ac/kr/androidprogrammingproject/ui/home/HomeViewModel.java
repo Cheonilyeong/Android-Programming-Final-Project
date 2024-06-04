@@ -57,6 +57,7 @@ public class HomeViewModel extends ViewModel {
             public void onCancelled(@NonNull DatabaseError error) {}
         });
         databaseRef.addChildEventListener(new ChildEventListener() {
+            // 게시물 등록
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Post post = snapshot.getValue(Post.class);
@@ -67,9 +68,22 @@ public class HomeViewModel extends ViewModel {
                 postDataset.setValue(posts);
                 isLoading.setValue(false);
             }
+            // 게시물 수정
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Post post = snapshot.getValue(Post.class);
+                List<Post> posts;
+                if(postDataset.getValue() == null) posts = new ArrayList<>();
+                else posts = postDataset.getValue();
 
+                for(int i = 0; i < posts.size(); i++) {
+                    if(posts.get(i).getPost_id().equals(post.getPost_id())) {
+                        posts.set(i, post);
+                    }
+                }
+
+                postDataset.setValue(posts);
+                isLoading.setValue(false);
             }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {}

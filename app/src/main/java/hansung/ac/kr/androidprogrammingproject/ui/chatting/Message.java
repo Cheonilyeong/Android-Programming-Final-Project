@@ -11,7 +11,6 @@ public class Message {
     private String time;
 
     public Message() {}
-
     public Message(int messageType, String message, String u_id, String time) {
         this.messageType = messageType;
         this.message = message;
