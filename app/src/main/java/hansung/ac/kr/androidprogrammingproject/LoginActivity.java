@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     public static String u_id;              // 사용자 u_id
 
     private FirebaseAuth firebaseAuth;      // 파이어베이스 인증처리
+    private FirebaseUser currentUser;
 
     private EditText etEmail, etPwd;        // 로그인 e_mail, 로그인 passwd
     private Button btnLogin, btnRegister;   // 로그인 버튼, 회원가입 버튼
@@ -32,8 +33,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Firebase 가져오기
+        // 자동 로그인
         firebaseAuth = FirebaseAuth.getInstance();
+        currentUser = firebaseAuth.getCurrentUser();
+        // 로그인 기록이 있으면
+        if (currentUser != null) {
+            u_id = currentUser.getUid();
+            // 자동 로그인
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         // 이메일, 패스워드
         etEmail = findViewById(R.id.et_email);
@@ -52,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         // 로그인 성공
                         if(task.isSuccessful()) {
-                            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                            currentUser = firebaseAuth.getCurrentUser();
                             u_id = currentUser.getUid();
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
@@ -80,14 +90,5 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        // 로그인 기록이 있으면
-        if (currentUser != null) {
-            u_id = currentUser.getUid();
-            // 자동 로그인
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 }

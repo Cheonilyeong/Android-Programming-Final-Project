@@ -68,7 +68,9 @@ public class HomeViewModel extends ViewModel {
                 isLoading.setValue(false);
             }
             @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
             @Override

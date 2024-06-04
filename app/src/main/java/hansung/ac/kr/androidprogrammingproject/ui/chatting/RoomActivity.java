@@ -37,6 +37,7 @@ import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.UserAccount;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.Message;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.MessageAdapter;
+import hansung.ac.kr.androidprogrammingproject.ui.home.Post;
 
 public class RoomActivity extends AppCompatActivity {
 
@@ -50,7 +51,7 @@ public class RoomActivity extends AppCompatActivity {
     private ArrayList<Message> messageDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
 
     private ImageView iv_back;                  // 뒤로 가기 버튼
-    private TextView tv_nickname;               // 대화 상대 nickname
+    private TextView tv_title;                  // 채팅 방 이름 (post title)
 
     private String room_id;                     // 게시물 채팅 방 room_id (post_id)
     private String u_id;                        // 게시물 채팅 방장(작성자) u_id
@@ -84,9 +85,21 @@ public class RoomActivity extends AppCompatActivity {
         room_id = intent.getStringExtra("room_id");
         Log.d("Enter Room", "Room_id: " + room_id);
 
+        // title 가져오기
+        tv_title = findViewById(R.id.tv_title);
+        database = FirebaseDatabase.getInstance();
+        databaseRef = database.getReference("project").child("Post").child(room_id);
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Post post = snapshot.getValue(Post.class);
+                tv_title.setText('\"' + post.getTitle() + '\"' + " 채팅 방");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
 
         // 채팅 방 대화 가져오기
-        database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("project").child("Room").child(room_id);
 
         databaseRef.addChildEventListener(new ChildEventListener() {
@@ -113,11 +126,12 @@ public class RoomActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String msg = et_msg.getText().toString();
                 if(msg.equals("") || msg.trim().equals("")) return;
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String timeStamp1 = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String timeStamp2 = new SimpleDateFormat("HH:mm").format(new Date());
 
-                Message message = new Message(3, msg, LoginActivity.u_id, timeStamp);
+                Message message = new Message(3, msg, LoginActivity.u_id, timeStamp2);
                 databaseRef = database.getReference("project").child("Room").child(room_id);
-                databaseRef.push().setValue(message);
+                databaseRef.child(timeStamp1).setValue(message);
                 // lastMessage(message.getMessage());
 
                 et_msg.setText("");

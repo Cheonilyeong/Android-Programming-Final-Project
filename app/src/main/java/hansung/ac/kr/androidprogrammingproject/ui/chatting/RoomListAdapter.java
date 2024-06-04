@@ -1,6 +1,7 @@
 package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +34,7 @@ import hansung.ac.kr.androidprogrammingproject.ui.home.Post;
 
 public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHolder> {
 
-    private OnItemClickListener itemClickListener; // OnItemClickListener
+    private OnItemClickListener itemClickListener;    // OnItemClickListener
     private List<RoomList> dataList;                  // RoomList
 
     public RoomListAdapter() {
@@ -91,17 +94,55 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Post post = snapshot.getValue(Post.class);
                 holder.tv_title.setText("\"" + post.getTitle() + "\" 채팅 방");
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
 
         // lastMessage & time
-        holder.tv_time.setText(dataModel.getTime());
-        holder.tv_lastMessage.setText(dataModel.getLastMessage());
-    }
+        databaseRef = database.getReference("project").child("Room").child(room_id);
+        databaseRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+                // 마지막 child인 경우 처리
+                DatabaseReference databaseRef = database.getReference("project").child("Room").child(room_id);
+                databaseRef.limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        // 마지막 child에 대한 처리 로직 실행
+                        for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                            Message msg = childSnapshot.getValue(Message.class);
+                            if (msg.getMessageType() == Message.ENTER) {
+                                DatabaseReference databaseRef = database.getReference("project").child("UserAccount").child(msg.getU_id());
+                                databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        UserAccount userAccount = snapshot.getValue(UserAccount.class);
+                                        String nickname = userAccount.getNickName();
+                                        holder.tv_lastMessage.setText('\"' + nickname + '\"' + msg.getMessage());
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {}
+                                });
+                            } else holder.tv_lastMessage.setText(msg.getMessage());
+                            holder.tv_time.setText(msg.getTime());
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+            }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
 
     @Override
     public int getItemCount() {

@@ -190,35 +190,27 @@ public class AddPostActivity extends AppCompatActivity {
 
                 // 등록 글 올리기
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference databaseRef = database.getReference("project").child("Post");
+                DatabaseReference databaseRef = database.getReference("project").child("Post").push();
 
-                Post post = new Post(LoginActivity.u_id, str_et_title, str_rb_checked, str_et_food, str_et_content, str_sp_person, str_tv_day, str_tv_time);
-                databaseRef.push().setValue(post, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        if (error == null) {
-                            String postKey = ref.getKey();
-                            ref.child("post_id").setValue(postKey);
+                String postKey = databaseRef.getKey();
+                Post post = new Post(postKey, LoginActivity.u_id, str_et_title, str_rb_checked, str_et_food, str_et_content, str_sp_person, str_tv_day, str_tv_time);
+                databaseRef.setValue(post);
 
-                            // 해당 포스트 채팅 방 만들고 들어가기
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            Message message = new Message(1, "입장하였습니다.", LoginActivity.u_id, timeStamp);
-                            DatabaseReference databaseRef = database.getReference("project").child("Room");
-                            databaseRef.child(postKey).push().setValue(message);
+                // 해당 포스트 채팅 방 만들고 들어가기
+                String timeStamp1 = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String timeStamp2 = new SimpleDateFormat("HH:mm").format(new Date());
+                Message message = new Message(1, "님이 입장하였습니다.", LoginActivity.u_id, timeStamp2);
+                databaseRef = database.getReference("project").child("Room");
+                databaseRef.child(postKey).child(timeStamp1).setValue(message);
 
-                            // 참여 중인 채팅 방 목록에 채팅 방 추가
-                            RoomList roomList = new RoomList(postKey, str_et_title, "");
-                            databaseRef = database.getReference("project").child("UsersRoom");
-                            databaseRef.child(LoginActivity.u_id).push().setValue(roomList);
+                // 참여 중인 채팅 방 목록에 채팅 방 추가
+                RoomList roomList = new RoomList(postKey, timeStamp1, "");
+                databaseRef = database.getReference("project").child("UsersRoom");
+                databaseRef.child(LoginActivity.u_id).push().setValue(roomList);
 
-                            // 채팅 방 참가 인원에 추가
-                            databaseRef = database.getReference("project").child("RoomUsers");
-                            databaseRef.child(postKey).push().setValue(LoginActivity.u_id);
-                        }
-                    }
-                });
-
-
+                // 채팅 방 참가 인원에 추가
+                databaseRef = database.getReference("project").child("RoomUsers");
+                databaseRef.child(postKey).push().setValue(LoginActivity.u_id);
 
                 // 나의 게시물에 등록
 

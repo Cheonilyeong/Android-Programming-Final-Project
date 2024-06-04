@@ -2,16 +2,29 @@ package hansung.ac.kr.androidprogrammingproject.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import hansung.ac.kr.androidprogrammingproject.LoginActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
+import hansung.ac.kr.androidprogrammingproject.ui.chatting.Message;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomActivity;
+import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomList;
 
 public class ShowPostActivity extends AddPostActivity{
 
@@ -47,7 +60,7 @@ public class ShowPostActivity extends AddPostActivity{
         String time = intent.getStringExtra("time");
         String content = intent.getStringExtra("content");
         String person = intent.getStringExtra("person");
-
+        // Log.d("showpost 입장", post_id);
 
         // 뒤로 가기 버튼
         iv_back = findViewById(R.id.iv_back);
@@ -91,9 +104,60 @@ public class ShowPostActivity extends AddPostActivity{
         tv_chatting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // post_id = room_id
                 Intent intent = new Intent(ShowPostActivity.this, RoomActivity.class);
                 intent.putExtra("room_id", post_id);
-                startActivity(intent);
+
+                // 게시물 채팅 방에 이미 포함되어있는가?
+                database = FirebaseDatabase.getInstance();
+                databaseRef = database.getReference("project").child("RoomUsers").child(post_id);
+                databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean flag = true;
+                        int cnt = 1;
+
+                        if(snapshot.getChildren() != null) {
+                            for(DataSnapshot childSnapshot : snapshot.getChildren()) {
+                                Log.d("참여 유저 확인" , "LoginActivity.u_id: " + LoginActivity.u_id
+                                        + " // RoomUsers" + cnt + ": " + childSnapshot.getValue());
+                                // 이미 참여 중인 채팅 방이면
+                                if(LoginActivity.u_id.equals(childSnapshot.getValue())) {
+                                    flag = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(flag) {
+                            // 참여 중이 아니면 방에 입장하기
+                            databaseRef.push().setValue(LoginActivity.u_id);
+
+                            // 나의 참여 중인 채팅 방에 추가하기
+                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                            RoomList roomList = new RoomList(post_id, timeStamp, "");
+                            databaseRef = database.getReference("project").child("UsersRoom");
+                            databaseRef.child(LoginActivity.u_id).push().setValue(roomList);
+
+                            // 방에 입장하고 입장 메세지 전달
+                            Message message = new Message(1, "님이 입장하였습니다.", LoginActivity.u_id, timeStamp);
+                            databaseRef = database.getReference("project").child("Room");
+                            databaseRef.child(post_id).child(timeStamp).setValue(message, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                    startActivity(intent);
+                                }
+                            });
+
+                        }
+                        else {
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
             }
         });
     }

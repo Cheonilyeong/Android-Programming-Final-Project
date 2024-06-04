@@ -48,6 +48,8 @@ public class ChattingViewModel extends ViewModel {
 
     // 데이터 읽기
     public void loadRoomListFromFirebase() {
+        // Log.d("LoginActivity.u_id", LoginActivity.u_id);
+
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id);
         databaseRef.addValueEventListener(new ValueEventListener() {

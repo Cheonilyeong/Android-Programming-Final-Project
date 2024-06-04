@@ -13,7 +13,8 @@ public class Post {
     private String time;
 
     public Post() {}
-    public Post(String u_id, String title, String kindOf, String food, String content, String person, String day, String time) {
+    public Post(String post_id, String u_id, String title, String kindOf, String food, String content, String person, String day, String time) {
+        this.post_id = post_id;
         this.u_id = u_id;
         this.title = title;
         this.kindOf = kindOf;

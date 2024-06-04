@@ -12,7 +12,7 @@ public class Message {
 
     public Message() {}
 
-    public Message(int messageType, String message, String u_id, String tim) {
+    public Message(int messageType, String message, String u_id, String time) {
         this.messageType = messageType;
         this.message = message;
         this.u_id = u_id;

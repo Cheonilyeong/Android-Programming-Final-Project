@@ -56,8 +56,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         // 데이터를 뷰 홀더의 뷰에 바인딩
         Message dataModel = dataList.get(position);
 
-        Log.d("u_id", dataModel.getU_id());
-        Log.d("LoginActivity.u_id", LoginActivity.u_id);
+        //Log.d("u_id", dataModel.getU_id());
+        //Log.d("LoginActivity.u_id", LoginActivity.u_id);
 
         // 사용자 닉네임 받아오기
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -66,10 +66,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserAccount userAccount = snapshot.getValue(UserAccount.class);
-                String nickname = userAccount.getNickName().toString();
+                String nickname = userAccount.getNickName();
 
                 // 비동기니 여기서 처리하자.
-                if(dataModel.getMessageType() == Message.ENTER) {}
+                if(dataModel.getMessageType() == Message.ENTER) {
+                    holder.tv_msg0.setText('\"' + nickname + '\"' + dataModel.getMessage());
+                }
                 else if(dataModel.getU_id().equals(LoginActivity.u_id)) {
                     holder.tv_nickname2.setText(nickname);
                 }
@@ -88,8 +90,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             parent.removeView(holder.tv_msg1);
             parent.removeView(holder.tv_nickname2);
             parent.removeView(holder.tv_msg2);
-
-            holder.tv_msg0.setText(dataModel.getMessage());
         }
         // 내가 쓴 Message면 오른쪽에 배치
         else if(dataModel.getU_id().equals(LoginActivity.u_id)) {
