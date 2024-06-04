@@ -73,7 +73,6 @@ public class HomeFragment extends Fragment {
         });
         recyclerView.setAdapter(postListAdapter);
 
-
         // 데이터 관찰 및 로딩 상태 처리
         homeViewModel.getPostDataset().observe(getViewLifecycleOwner(), posts -> {
             postListAdapter.setPostList(posts);

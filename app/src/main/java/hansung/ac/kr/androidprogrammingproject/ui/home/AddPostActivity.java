@@ -213,9 +213,8 @@ public class AddPostActivity extends AppCompatActivity {
                 databaseRef.child(postKey).push().setValue(LoginActivity.u_id);
 
                 // 나의 게시물에 등록
-
-
-
+                databaseRef = database.getReference("project").child("UsersPost");
+                databaseRef.child(LoginActivity.u_id).child(postKey).setValue(postKey);
 
                 // 완료
                 finish();

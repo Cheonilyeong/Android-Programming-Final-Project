@@ -53,6 +53,7 @@ public class ProfileFragment extends Fragment {
     private TextView tv_information;            // information
     
     private Button btn_modification;            // 프로필 수정 버튼
+    private Button btn_myPost;                  // 내 게시물 버튼
     private Button btn_logout;                  // 로그아웃 버튼
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,6 +126,16 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ModificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // 내 게시물
+        btn_myPost = root.findViewById(R.id.btn_myPost);
+        btn_myPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MyPostActivity.class);
                 startActivity(intent);
             }
         });

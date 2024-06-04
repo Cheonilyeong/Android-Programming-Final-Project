@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +32,7 @@ import hansung.ac.kr.androidprogrammingproject.ui.chatting.Message;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomActivity;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomList;
 
-public class ShowPostActivity extends AddPostActivity{
+public class ShowPostActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;              // 데이터베이스 인스턴스
     private DatabaseReference databaseRef;          // 데이터베이스 레퍼런스

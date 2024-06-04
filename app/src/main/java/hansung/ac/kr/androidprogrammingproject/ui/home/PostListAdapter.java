@@ -99,6 +99,10 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     public int getItemCount() {
         return dataList.size();
     }
+    public void addPost(Post post) {
+        dataList.add(post);
+        notifyItemInserted(dataList.size()-1);
+    }
     public void setPostList(List<Post> postList) {
         this.dataList = postList;
         notifyDataSetChanged();

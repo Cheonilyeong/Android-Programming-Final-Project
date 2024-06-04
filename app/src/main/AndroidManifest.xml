@@ -67,6 +67,12 @@
             android:exported="false" >
         </activity>
 
+        <!-- mypostActivity -->
+        <activity
+            android:name=".ui.profile.MyPostActivity"
+            android:exported="false" >
+        </activity>
+
     </application>
 
 </manifest>
