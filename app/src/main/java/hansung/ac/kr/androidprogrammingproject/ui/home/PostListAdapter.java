@@ -23,7 +23,6 @@ import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.UserAccount;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.RoomListAdapter;
 
-
 public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHolder> {
 
     private FirebaseDatabase database;             // 데이터베이스 인스턴스
@@ -39,7 +38,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     // ViewHolder 클래스 정의
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tv_title, tv_kindOf, tv_day, tv_time, tv_nickname;
-
+        public View v_line;
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -48,6 +47,7 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             tv_day = itemView.findViewById(R.id.tv_day);
             tv_time = itemView.findViewById(R.id.tv_time);
             tv_nickname = itemView.findViewById(R.id.tv_nickname);
+            v_line = itemView.findViewById(R.id.v_line);
         }
     }
 
@@ -94,6 +94,13 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+
+        if (position != getItemCount() - 1) {
+            holder.v_line.setVisibility(View.VISIBLE);
+        } else {
+            holder.v_line.setVisibility(View.INVISIBLE);
+        }
+
     }
     @Override
     public int getItemCount() {

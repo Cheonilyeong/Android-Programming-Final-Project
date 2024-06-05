@@ -3,7 +3,7 @@ package hansung.ac.kr.androidprogrammingproject.ui.chatting;
 public class Message {
 
     public static final int ENTER = 1;
-    public static final int COMEOUT = 2;
+    public static final int EXIT = 2;
     public static final int MESSAGE = 3;
     private int messageType;
     private String message;

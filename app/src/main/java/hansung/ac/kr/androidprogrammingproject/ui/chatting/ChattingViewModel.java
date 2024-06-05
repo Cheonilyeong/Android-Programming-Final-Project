@@ -48,7 +48,7 @@ public class ChattingViewModel extends ViewModel {
 
     // 데이터 읽기
     public void loadRoomListFromFirebase() {
-        // Log.d("LoginActivity.u_id", LoginActivity.u_id);
+        Log.d("LoginActivity.u_id", LoginActivity.u_id);
 
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id);
@@ -97,7 +97,12 @@ public class ChattingViewModel extends ViewModel {
                 RoomList room = snapshot.getValue(RoomList.class);
                 List<RoomList> roomList = roomListDataset.getValue();
 
-                roomList.remove(room);
+                for(int i = 0; i < roomList.size(); i++) {
+                    if(roomList.get(i).getRoom_id().equals(room.getRoom_id())) {
+                        roomList.remove(i);
+                        break;
+                    }
+                }
 
                 roomListDataset.setValue(roomList);
                 isLoading.setValue(false);

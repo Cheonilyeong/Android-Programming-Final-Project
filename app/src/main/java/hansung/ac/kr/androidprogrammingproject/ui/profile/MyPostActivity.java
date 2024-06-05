@@ -64,7 +64,7 @@ public class MyPostActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         databaseRef = database.getReference("project").child("UsersPost").child(LoginActivity.u_id);
 
-        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // 나의 게시물 post_id 구하기

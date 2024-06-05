@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +40,7 @@ import hansung.ac.kr.androidprogrammingproject.UserAccount;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.Message;
 import hansung.ac.kr.androidprogrammingproject.ui.chatting.MessageAdapter;
 import hansung.ac.kr.androidprogrammingproject.ui.home.Post;
+import hansung.ac.kr.androidprogrammingproject.ui.home.ShowPostActivity;
 
 public class RoomActivity extends AppCompatActivity {
 
@@ -51,7 +54,10 @@ public class RoomActivity extends AppCompatActivity {
     private ArrayList<Message> messageDataset = new ArrayList<>(); // 데이터 리스트를 멤버 변수로 선언
 
     private ImageView iv_back;                  // 뒤로 가기 버튼
+    private ImageView iv_exit;                  // 채팅 방 나가기 버튼
     private TextView tv_title;                  // 채팅 방 이름 (post title)
+    private EditText et_msg;                    // 메세지
+    private Button btn_send;                    // 메세지 전송 버튼
 
     private String room_id;                     // 게시물 채팅 방 room_id (post_id)
     private String u_id;                        // 게시물 채팅 방장(작성자) u_id
@@ -71,16 +77,7 @@ public class RoomActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messageDataset);
         recyclerView.setAdapter(messageAdapter);
 
-        // 뒤로 가기 버튼
-        iv_back = findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        // Get room_id
+        // Get room_id & u_id
         Intent intent = getIntent();
         room_id = intent.getStringExtra("room_id");
         Log.d("Enter Room", "Room_id: " + room_id);
@@ -94,6 +91,7 @@ public class RoomActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Post post = snapshot.getValue(Post.class);
                 tv_title.setText('\"' + post.getTitle() + '\"' + " 채팅 방");
+                u_id = post.getU_id();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -119,8 +117,9 @@ public class RoomActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {}
         });
 
-        EditText et_msg = findViewById(R.id.et_msg);
-        Button btn_send = findViewById(R.id.btn_send);
+        // 메세지 전송 버튼
+        et_msg = findViewById(R.id.et_msg);
+        btn_send = findViewById(R.id.btn_send);
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,9 +131,69 @@ public class RoomActivity extends AppCompatActivity {
                 Message message = new Message(3, msg, LoginActivity.u_id, timeStamp2);
                 databaseRef = database.getReference("project").child("Room").child(room_id);
                 databaseRef.child(timeStamp1).setValue(message);
-                // lastMessage(message.getMessage());
 
                 et_msg.setText("");
+            }
+        });
+        // 뒤로 가기 버튼
+        iv_back = findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        // 채팅 방 나가기 버튼
+        iv_exit = findViewById(R.id.iv_exit);
+        iv_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View dialogView = View.inflate(RoomActivity.this, R.layout.dialog_exit, null);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(RoomActivity.this);
+                dlg.setView(dialogView);
+
+                final AlertDialog dialog = dlg.create();
+
+                Button btn_no = dialogView.findViewById(R.id.btn_no);
+                btn_no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.cancel();
+                    }
+                });
+
+                Button btn_yes = dialogView.findViewById(R.id.btn_yes);
+                btn_yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // 혹시 작성자인가?
+                        if(u_id.equals(LoginActivity.u_id)) {
+                            dialog.cancel();
+                            Toast.makeText(getApplicationContext(), "작성자는 방을 나갈 수 없습니다", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        // 퇴장 메세지 보내기
+                        String timeStamp1 = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                        String timeStamp2 = new SimpleDateFormat("HH:mm").format(new Date());
+
+                        Message message = new Message(2, "님이 방을 나갔습니다", LoginActivity.u_id, timeStamp2);
+                        database = FirebaseDatabase.getInstance();
+                        databaseRef = database.getReference("project").child("Room").child(room_id);
+                        databaseRef.child(timeStamp1).setValue(message);
+
+                        // RoomUsers에서 해당 u_id 제거
+                        databaseRef = database.getReference("project").child("RoomUsers").child(room_id).child(LoginActivity.u_id);
+                        databaseRef.removeValue();
+
+                        // UsersRoom에서 해당 room_id 제거
+                        databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id).child(room_id);
+                        databaseRef.removeValue();
+
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+                dialog.show();
             }
         });
     }

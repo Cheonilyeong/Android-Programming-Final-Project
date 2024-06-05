@@ -44,6 +44,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
     // ViewHolder 클래스 정의
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tv_title, tv_lastMessage, tv_time;
+        public View v_line;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -51,6 +52,7 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_lastMessage = itemView.findViewById(R.id.tv_lastMessage);
             tv_time = itemView.findViewById(R.id.tv_time);
+            v_line = itemView.findViewById(R.id.v_line);
         }
     }
 
@@ -92,6 +94,8 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
         databaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getValue() == null) return;
+
                 Post post = snapshot.getValue(Post.class);
                 holder.tv_title.setText("\"" + post.getTitle() + "\" 채팅 방");
             }
@@ -142,6 +146,12 @@ public class RoomListAdapter extends RecyclerView.Adapter<RoomListAdapter.ViewHo
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+
+        if (position != getItemCount() - 1) {
+            holder.v_line.setVisibility(View.VISIBLE);
+        } else {
+            holder.v_line.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override

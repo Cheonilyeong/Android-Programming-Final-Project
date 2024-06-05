@@ -151,6 +151,9 @@ public class ShowPostActivity extends AppCompatActivity {
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {}
                             });
+                            // UsersPost에서 삭제
+                            databaseRef = database.getReference("project").child("UsersPost").child(LoginActivity.u_id).child(post_id);
+                            databaseRef.removeValue();
 
                             dialog.cancel();
                             finish();
@@ -194,7 +197,7 @@ public class ShowPostActivity extends AppCompatActivity {
                                 Log.d("참여 유저 확인" , "LoginActivity.u_id: " + LoginActivity.u_id
                                         + " // RoomUsers" + cnt + ": " + childSnapshot.getValue());
                                 // 이미 참여 중인 채팅 방이면
-                                if(LoginActivity.u_id.equals(childSnapshot.getValue())) {
+                                if(LoginActivity.u_id.equals(childSnapshot.getValue(String.class))) {
                                     flag = false;
                                     break;
                                 }
@@ -203,18 +206,19 @@ public class ShowPostActivity extends AppCompatActivity {
 
                         if(flag) {
                             // 참여 중이 아니면 방에 입장하기
-                            databaseRef.push().setValue(LoginActivity.u_id);
+                            databaseRef.child(LoginActivity.u_id).setValue(LoginActivity.u_id);
 
                             // 나의 참여 중인 채팅 방에 추가하기
-                            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                            RoomList roomList = new RoomList(post_id, timeStamp, "");
+                            String timeStamp1 = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                            String timeStamp2 = new SimpleDateFormat("HH:mm").format(new Date());
+                            RoomList roomList = new RoomList(post_id, timeStamp1, "");
                             databaseRef = database.getReference("project").child("UsersRoom");
                             databaseRef.child(LoginActivity.u_id).child(post_id).setValue(roomList);
 
                             // 방에 입장하고 입장 메세지 전달
-                            Message message = new Message(1, "님이 입장하였습니다.", LoginActivity.u_id, timeStamp);
+                            Message message = new Message(1, "님이 입장하였습니다.", LoginActivity.u_id, timeStamp2);
                             databaseRef = database.getReference("project").child("Room");
-                            databaseRef.child(post_id).child(timeStamp).setValue(message, new DatabaseReference.CompletionListener() {
+                            databaseRef.child(post_id).child(timeStamp1).setValue(message, new DatabaseReference.CompletionListener() {
                                 @Override
                                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                     startActivity(intent);

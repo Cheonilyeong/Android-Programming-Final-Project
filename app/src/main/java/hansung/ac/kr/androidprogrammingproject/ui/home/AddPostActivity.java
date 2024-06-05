@@ -206,11 +206,11 @@ public class AddPostActivity extends AppCompatActivity {
                 // 참여 중인 채팅 방 목록에 채팅 방 추가
                 RoomList roomList = new RoomList(postKey, timeStamp1, "");
                 databaseRef = database.getReference("project").child("UsersRoom");
-                databaseRef.child(LoginActivity.u_id).push().setValue(roomList);
+                databaseRef.child(LoginActivity.u_id).child(postKey).setValue(roomList);
 
                 // 채팅 방 참가 인원에 추가
                 databaseRef = database.getReference("project").child("RoomUsers");
-                databaseRef.child(postKey).push().setValue(LoginActivity.u_id);
+                databaseRef.child(postKey).child(LoginActivity.u_id).setValue(LoginActivity.u_id);
 
                 // 나의 게시물에 등록
                 databaseRef = database.getReference("project").child("UsersPost");
