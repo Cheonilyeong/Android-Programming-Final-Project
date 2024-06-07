@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,12 +61,22 @@ public class RoomActivity extends AppCompatActivity {
     private Button btn_send;                    // 메세지 전송 버튼
 
     private String room_id;                     // 게시물 채팅 방 room_id (post_id)
-    private String u_id;                        // 게시물 채팅 방장(작성자) u_id
+    private Post post;                          // 어떤 게시물의 채팅 방인가
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
+
+        // Get room_id
+        Intent intent = getIntent();
+        room_id = intent.getStringExtra("room_id");
+        Log.d("Enter Room", "Room_id: " + room_id);
+
+        // ViewModel
+        RoomViewModel roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+        roomViewModel.setRoom_id(room_id);
+        roomViewModel.loadRoomListFromFirebase();
 
         // Recycler View
         recyclerView = findViewById(R.id.rv);
@@ -77,44 +88,17 @@ public class RoomActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messageDataset);
         recyclerView.setAdapter(messageAdapter);
 
-        // Get room_id & u_id
-        Intent intent = getIntent();
-        room_id = intent.getStringExtra("room_id");
-        Log.d("Enter Room", "Room_id: " + room_id);
-
-        // title 가져오기
+        // 데이터 관찰 및 로딩 상태 처리
+        // title 바꾸기
         tv_title = findViewById(R.id.tv_title);
-        database = FirebaseDatabase.getInstance();
-        databaseRef = database.getReference("project").child("Post").child(room_id);
-        databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Post post = snapshot.getValue(Post.class);
-                tv_title.setText('\"' + post.getTitle() + '\"' + " 채팅 방");
-                u_id = post.getU_id();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+        roomViewModel.getPost().observe(this, post -> {
+            this.post = post;
+            tv_title.setText(post.getTitle());
         });
 
-        // 채팅 방 대화 가져오기
-        databaseRef = database.getReference("project").child("Room").child(room_id);
-
-        databaseRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                Message message = snapshot.getValue(Message.class);
-                messageAdapter.addChatting(message);
-                recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
-            }
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {}
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {}
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+        // message 받아서 어뎁터에
+        roomViewModel.getMessageDataset().observe(this, messageList -> {
+            messageAdapter.setMessageList(messageList);
         });
 
         // 메세지 전송 버튼
@@ -129,6 +113,7 @@ public class RoomActivity extends AppCompatActivity {
                 String timeStamp2 = new SimpleDateFormat("HH:mm").format(new Date());
 
                 Message message = new Message(3, msg, LoginActivity.u_id, timeStamp2);
+                database = FirebaseDatabase.getInstance();
                 databaseRef = database.getReference("project").child("Room").child(room_id);
                 databaseRef.child(timeStamp1).setValue(message);
 
@@ -167,6 +152,7 @@ public class RoomActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         // 혹시 작성자인가?
+                        String u_id = post.getU_id();
                         if(u_id.equals(LoginActivity.u_id)) {
                             dialog.cancel();
                             Toast.makeText(getApplicationContext(), "작성자는 방을 나갈 수 없습니다", Toast.LENGTH_SHORT).show();
@@ -196,14 +182,5 @@ public class RoomActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-    }
-
-    // lastMessage 수정
-    public void lastMessage(String msg) {
-//        databaseRef = database.getReference("project").child("UsersRoom").child(u_id);
-//        databaseRef.child(room_id).child("lastMessage").setValue(msg);
-//
-//        databaseRef = database.getReference("project").child("UsersRoom").child(LoginActivity.u_id);
-//        databaseRef.child(room_id).child("lastMessage").setValue(msg);
     }
 }

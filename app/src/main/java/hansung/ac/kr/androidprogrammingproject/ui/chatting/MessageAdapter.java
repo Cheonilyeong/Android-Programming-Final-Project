@@ -24,13 +24,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import hansung.ac.kr.androidprogrammingproject.LoginActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.UserAccount;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-    ArrayList<Message> dataList;    // message
+    List<Message> dataList;    // message
 
     public MessageAdapter(ArrayList<Message> dataList) {
         this.dataList = dataList;
@@ -110,9 +111,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public int getItemCount() {
         return dataList.size();
     }
-    public void addChatting(Message message) {
-        dataList.add(message);
-        notifyItemInserted(dataList.size()-1);
+    public void setMessageList(List<Message> messageList) {
+        this.dataList = messageList;
+        notifyDataSetChanged();
     }
 
     // 이미지 로드
