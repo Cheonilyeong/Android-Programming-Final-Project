@@ -38,10 +38,6 @@ import hansung.ac.kr.androidprogrammingproject.databinding.FragmentProfileBindin
 
 public class ProfileFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;          // 파이어베이스 인증처리
-    private FirebaseUser firebaseUser;          // 파이어베이스 유저
-    private FirebaseDatabase database;          // 데이터베이스 인스턴스
-    private DatabaseReference databaseRef;      // 데이터베이스 레퍼런스
     private FirebaseStorage storage;            // 스토리지 인스턴스
     private StorageReference storageRef;        // 스토리지 레퍼런스
 
@@ -77,48 +73,25 @@ public class ProfileFragment extends Fragment {
         tv_nickname = root.findViewById(R.id.tv_nickname);
         tv_information = root.findViewById(R.id.tv_information);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-
-        database = FirebaseDatabase.getInstance();
-        databaseRef = database.getReference("project").child("UserAccount");
-
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
-        if (firebaseUser != null) {
-            String currentUserId = firebaseUser.getUid(); // 현재 로그인한 사용자의 UID
+        // currentUser
+        profileViewModel.getCurrentAccount().observe(getViewLifecycleOwner(), currentUser -> {
 
-            Log.d("Profile", "Get FirebaseUser");
-            // 현재 로그인한 사용자의 정보를 Database에서 읽어오기
-            databaseRef.child(currentUserId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    UserAccount userAccount = dataSnapshot.getValue(UserAccount.class);
+            String email = currentUser.getEmail();
+            String nickname = currentUser.getNickName();
+            String information = currentUser.getInformation();
+            String imageURL = currentUser.getImageURL();
+            // 예: 화면에 사용자 정보를 표시
+            Log.d("UserInfo", "Email: " + email + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageURL);
 
-                    // 로그인한 사용자의 정보를 활용합니다.
-                    if (userAccount != null) {
-                        String email = userAccount.getEmail();
-                        String nickname = userAccount.getNickName();
-                        String information = userAccount.getInformation();
-                        String imageURL = userAccount.getImageURL();
-                        // 예: 화면에 사용자 정보를 표시
-                        Log.d("UserInfo", "Email: " + email + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageURL);
-
-                        if(imageURL.equals("")) iv_profile.setImageResource(R.drawable.basicimage);
-                        else downloadImage(imageURL);
-                        tv_email.setText(email);
-                        tv_nickname.setText(nickname);
-                        tv_information.setText(information);
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w("UserInfo", "loadUser:onCancelled", databaseError.toException());
-                }
-            });
-        }
-        else Log.w("Profile", "No FirebaseUser");
+            if(imageURL.equals("")) iv_profile.setImageResource(R.drawable.basicimage);
+            else downloadImage(imageURL);
+            tv_email.setText(email);
+            tv_nickname.setText(nickname);
+            tv_information.setText(information);
+        });
 
         // 정보 수정으로 이동
         btn_modification = root.findViewById(R.id.btn_modification);
@@ -145,6 +118,7 @@ public class ProfileFragment extends Fragment {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signOut();
 
                 Intent intent = new Intent(getActivity(), LoginActivity.class);

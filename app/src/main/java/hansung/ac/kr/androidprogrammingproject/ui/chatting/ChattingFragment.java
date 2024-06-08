@@ -67,7 +67,7 @@ public class ChattingFragment extends Fragment {
         });
         recyclerView.setAdapter(roomListAdapter);
 
-        // 데이터 관찰 및 로딩 상태 처리
+        // roomList
         chattingViewModel.getRoomListDataset().observe(getViewLifecycleOwner(), roomList -> {
             roomListAdapter.setRoomList(roomList);
         });
