@@ -58,7 +58,7 @@ public class HomeViewModel extends ViewModel {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
-        databaseRef.addChildEventListener(new ChildEventListener() {
+        databaseRef.orderByKey().addChildEventListener(new ChildEventListener() {
             // 게시물 등록
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
