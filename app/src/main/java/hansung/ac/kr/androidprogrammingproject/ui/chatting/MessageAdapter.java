@@ -26,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import hansung.ac.kr.androidprogrammingproject.LoginActivity;
 import hansung.ac.kr.androidprogrammingproject.R;
 import hansung.ac.kr.androidprogrammingproject.UserAccount;
@@ -39,7 +40,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     // ViewHolder 클래스 정의
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView iv_profile;
+        public CircleImageView iv_profile;
         public TextView tv_nickname1, tv_msg1;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -91,7 +92,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     holder.tv_msg1.setGravity(Gravity.END);
                 }
                 else {
-                    if(imageURL.equals("")) holder.iv_profile.setImageResource(R.drawable.basicimage);
+                    if(imageURL.equals("profile/NULL.jpg")) holder.iv_profile.setImageResource(R.drawable.basicimage);
                     else downloadImage(holder, imageURL);
                     holder.iv_profile.setVisibility(View.VISIBLE);
                     holder.tv_nickname1.setText(nickname);

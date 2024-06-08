@@ -99,6 +99,7 @@ public class RoomActivity extends AppCompatActivity {
         // message 받아서 어뎁터에
         roomViewModel.getMessageDataset().observe(this, messageList -> {
             messageAdapter.setMessageList(messageList);
+            recyclerView.scrollToPosition(messageAdapter.getItemCount() - 1);
         });
 
         // 메세지 전송 버튼
