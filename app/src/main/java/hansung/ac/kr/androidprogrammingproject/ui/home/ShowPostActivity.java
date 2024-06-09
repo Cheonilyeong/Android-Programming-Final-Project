@@ -40,8 +40,8 @@ public class ShowPostActivity extends AppCompatActivity {
     private String post_id;                         // 현재 게시물
     private String u_id;                            // 현재 게시물 작성자
 
-    private ImageView iv_back, iv_edit, iv_delete;
-    private TextView tv_title, tv_kindOf, tv_food, tv_person, tv_day, tv_time, tv_chatting;
+    private ImageView iv_back;
+    private TextView tv_edit, tv_delete, tv_title, tv_kindOf, tv_food, tv_person, tv_day, tv_time, tv_chatting;
     private EditText et_content;
 
     @Override
@@ -53,6 +53,8 @@ public class ShowPostActivity extends AppCompatActivity {
         post_id = intent.getStringExtra("post_id");
         u_id = intent.getStringExtra("u_id");
 
+        tv_edit = findViewById(R.id.tv_edit);
+        tv_delete = findViewById(R.id.tv_delete);
         tv_title = findViewById(R.id.tv_title);
         tv_kindOf = findViewById(R.id.tv_kindOf);
         tv_food = findViewById(R.id.tv_food);
@@ -60,6 +62,7 @@ public class ShowPostActivity extends AppCompatActivity {
         tv_time = findViewById(R.id.tv_time);
         et_content = findViewById(R.id.et_content);
         tv_person = findViewById(R.id.tv_person);
+
 
         // 게시물 정보 가져오기
         database = FirebaseDatabase.getInstance();
@@ -83,86 +86,87 @@ public class ShowPostActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {}
         });
 
-        // 내가 작성한 게시물인지
-        if(u_id.equals(LoginActivity.u_id)) {
-            // 수정 버튼
-            iv_edit = findViewById(R.id.iv_edit);
-            iv_edit.setVisibility(View.VISIBLE);
-            iv_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // 수정
-                    Intent intent = new Intent(ShowPostActivity.this, EditPostActivity.class);
-                    intent.putExtra("post_id", post_id);
-                    startActivity(intent);
-                }
-            });
+        // 수정 버튼
+        tv_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 수정
+                Intent intent = new Intent(ShowPostActivity.this, EditPostActivity.class);
+                intent.putExtra("post_id", post_id);
+                startActivity(intent);
+            }
+        });
+        // 삭제 버튼
+        tv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                View dialogView = View.inflate(ShowPostActivity.this, R.layout.dialog_delete, null);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(ShowPostActivity.this);
+                dlg.setView(dialogView);
 
-            // 삭제 버튼
-            iv_delete = findViewById(R.id.iv_delete);
-            iv_delete.setVisibility(View.VISIBLE);
-            iv_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    View dialogView = View.inflate(ShowPostActivity.this, R.layout.dialog_delete, null);
-                    AlertDialog.Builder dlg = new AlertDialog.Builder(ShowPostActivity.this);
-                    dlg.setView(dialogView);
+                final AlertDialog dialog = dlg.create();
 
-                    final AlertDialog dialog = dlg.create();
+                Button btn_no = dialogView.findViewById(R.id.btn_no);
+                btn_no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.cancel();
+                    }
+                });
 
-                    Button btn_no = dialogView.findViewById(R.id.btn_no);
-                    btn_no.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.cancel();
-                        }
-                    });
+                Button btn_yes = dialogView.findViewById(R.id.btn_yes);
+                btn_yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                    Button btn_yes = dialogView.findViewById(R.id.btn_yes);
-                    btn_yes.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                        // Post 삭제
+                        databaseRef = database.getReference("project").child("Post").child(post_id);
+                        databaseRef.removeValue();
+                        // Room 삭제
+                        databaseRef = database.getReference("project").child("Room").child(post_id);
+                        databaseRef.removeValue();
+                        // RoomUsers에 있는 유저 UsersRoom에서 삭제 후 RoomUsers 삭제
+                        databaseRef = database.getReference("project").child("RoomUsers").child(post_id);
+                        databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                ArrayList<String> u_idList = new ArrayList<>();
+                                for(DataSnapshot childSnapshot : snapshot.getChildren()) {
+                                    String u_id = childSnapshot.getValue(String.class);
+                                    u_idList.add(u_id);
+                                }
 
-                            // Post 삭제
-                            databaseRef = database.getReference("project").child("Post").child(post_id);
-                            databaseRef.removeValue();
-                            // Room 삭제
-                            databaseRef = database.getReference("project").child("Room").child(post_id);
-                            databaseRef.removeValue();
-                            // RoomUsers에 있는 유저 UsersRoom에서 삭제 후 RoomUsers 삭제
-                            databaseRef = database.getReference("project").child("RoomUsers").child(post_id);
-                            databaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    ArrayList<String> u_idList = new ArrayList<>();
-                                    for(DataSnapshot childSnapshot : snapshot.getChildren()) {
-                                        String u_id = childSnapshot.getValue(String.class);
-                                        u_idList.add(u_id);
-                                    }
-
-                                    for(String u_id : u_idList) {
-                                        databaseRef = database.getReference("project").child("UsersRoom").child(u_id);
-                                        databaseRef.removeValue();
-                                    }
-
-                                    databaseRef = database.getReference("project").child("RoomUsers").child(post_id);
+                                for(String u_id : u_idList) {
+                                    databaseRef = database.getReference("project").child("UsersRoom").child(u_id);
                                     databaseRef.removeValue();
                                 }
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {}
-                            });
-                            // UsersPost에서 삭제
-                            databaseRef = database.getReference("project").child("UsersPost").child(LoginActivity.u_id).child(post_id);
-                            databaseRef.removeValue();
 
-                            dialog.cancel();
-                            finish();
-                        }
-                    });
+                                databaseRef = database.getReference("project").child("RoomUsers").child(post_id);
+                                databaseRef.removeValue();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {}
+                        });
+                        // UsersPost에서 삭제
+                        databaseRef = database.getReference("project").child("UsersPost").child(LoginActivity.u_id).child(post_id);
+                        databaseRef.removeValue();
 
-                    dialog.show();
-                }
-            });
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+
+                dialog.show();
+            }
+        });
+
+        if(u_id.equals(LoginActivity.u_id)) {
+            tv_edit.setVisibility(View.VISIBLE);
+            tv_delete.setVisibility(View.VISIBLE);
+        }
+        else {
+            tv_edit.setVisibility(View.INVISIBLE);
+            tv_delete.setVisibility(View.INVISIBLE);
         }
 
         // 뒤로 가기 버튼

@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFBFF">
+    android:background="@color/background">
 
     <ImageView
         android:id="@+id/iv_back"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:padding="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/baseline_arrow_back_24"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,77 +27,96 @@
         app:civ_border_width="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
+    <android.widget.Button
         android:id="@+id/btn_basicImage"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
-        android:backgroundTint="#F1DFD9"
-        android:textColor="@color/black"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/skyblue"
+        android:textColor="@color/blue"
         android:text="기본이미지"
+        android:textSize="15dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.739"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
+    <android.widget.Button
         android:id="@+id/btn_image"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="190dp"
-        android:backgroundTint="#F1DFD9"
-        android:textColor="@color/black"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/skyblue"
+        android:textColor="@color/blue"
         android:text="이미지 가져오기"
+        android:textSize="15dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.739"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="270dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="300dp"
         android:text="닉네임"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_back" />
+
     <EditText
         android:id="@+id/et_nickname"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="310dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="50dp"
         android:hint="수정할 별명을 입력하세요"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
     <TextView
+        android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="55dp"
         android:layout_marginTop="400dp"
         android:text="한 줄 소개"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/et_information"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="430dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="-5dp"
+        android:layout_marginEnd="50dp"
         android:hint="한 줄 소개를 입력하세요"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/btn_save"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="520dp"
-        android:backgroundTint="#F1DFD9"
-        android:textColor="@color/black"
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/button_shape"
+        android:backgroundTint="@color/blue"
         android:text="저장하기"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

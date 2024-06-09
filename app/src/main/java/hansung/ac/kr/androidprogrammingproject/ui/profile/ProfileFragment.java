@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
     private TextView tv_nickname;               // nickname
     private TextView tv_information;            // information
     
-    private Button btn_modification;            // 프로필 수정 버튼
+    private TextView tv_modification;            // 프로필 수정 버튼
     private Button btn_myPost;                  // 내 게시물 버튼
     private Button btn_logout;                  // 로그아웃 버튼
     @Override
@@ -94,8 +94,8 @@ public class ProfileFragment extends Fragment {
         });
 
         // 정보 수정으로 이동
-        btn_modification = root.findViewById(R.id.btn_modification);
-        btn_modification.setOnClickListener(new View.OnClickListener() {
+        tv_modification = root.findViewById(R.id.tv_modification);
+        tv_modification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ModificationActivity.class);

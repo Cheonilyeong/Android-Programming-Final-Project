@@ -69,19 +69,19 @@ public class RegisterActivity extends AppCompatActivity {
                 String information = et_information.getText().toString();
 
                 if(email.equals("") || email.trim().equals("")) {
-                    Toast.makeText(RegisterActivity.this, "E-mail을 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "이메일을 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(passwd.equals("") || passwd.trim().equals("")) {
-                    Toast.makeText(RegisterActivity.this, "Password를 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "비밀번호를 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(nickname.equals("") || nickname.trim().equals("")) {
-                    Toast.makeText(RegisterActivity.this, "Nickname을 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "닉네임을 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(information.equals("") || information.trim().equals("")) {
-                    Toast.makeText(RegisterActivity.this, "Information을 입력하세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "한 줄 소개를 입력하세요", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
