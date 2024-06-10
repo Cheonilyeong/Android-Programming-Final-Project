@@ -38,9 +38,9 @@
 <br/>
 
 ### 3. 프로젝트 결과물
-| 회원가입 |
-| --- |
-|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/097960cc-fff4-48b9-af38-a455bd4c1ebd"> |
+| 회원가입 | 로그인 |
+| --- | --- |
+|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/097960cc-fff4-48b9-af38-a455bd4c1ebd"> | <img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/985967b6-ccc6-47d9-8fa2-4da9976a7561"> |
 
 
 <br/>
