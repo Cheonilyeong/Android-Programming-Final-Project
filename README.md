@@ -38,10 +38,10 @@
 <br/>
 
 ### 3. 프로젝트 결과물
-| 이름 | 나이 | 직업 |
-| --- | --- | --- |
-| 철수 | 25 | 학생 |
-| 영희 | 30 | 회사원 |
+| 회원가입 |
+| --- |
+|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/097960cc-fff4-48b9-af38-a455bd4c1ebd"> |
+
 
 <br/>
 
