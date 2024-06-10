@@ -46,7 +46,7 @@
 
 | 게시물 올리기 | 게시물 편집 | 게시물 삭제 |
 | --- | --- | --- |
-|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/175ebdeb-f217-4835-a1ae-8e53121f5015">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/bd13dc3a-d0c9-44d9-87cb-8aecbadf9b70">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/a7189b46-d8ae-4b15-9ff2-96fd8037f1e4">| 
+|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/175ebdeb-f217-4835-a1ae-8e53121f5015">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/bd13dc3a-d0c9-44d9-87cb-8aecbadf9b70">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/49149191-b8d7-4e40-a026-6e83062154de">| 
 
 <br/>
 
