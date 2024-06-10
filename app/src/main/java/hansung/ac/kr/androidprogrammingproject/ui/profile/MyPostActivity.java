@@ -34,8 +34,6 @@ public class MyPostActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;   // 레이아웃 매니저
     private PostListAdapter postListAdapter;            // 어뎁터
 
-    private ArrayList<Post> postDataset = new ArrayList<>();
-
     private ImageView iv_back;                  // 뒤로 가기 버튼
 
     public void onCreate(Bundle savedInstanceState) {

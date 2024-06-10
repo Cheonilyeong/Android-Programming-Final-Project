@@ -151,9 +151,14 @@ public class PostListAdapter extends RecyclerView.Adapter<PostListAdapter.ViewHo
     }
     // 이미지 저장
     public void loadImageIntoImageView(PostListAdapter.ViewHolder holder, String imageUrl) {
-        Glide.with(holder.itemView.getContext())
-                .load(imageUrl)
-                .into(holder.iv_profile);
+        try {
+            Glide.with(holder.itemView.getContext())
+                    .load(imageUrl)
+                    .into(holder.iv_profile);
+        } catch (IllegalArgumentException e) {
+            // Activity가 파괴되었을 때의 예외 처리 로직 작성
+            Log.e("Glide", "Error loading image: " + e.getMessage());
+        }
     }
     // OnItemClickListener 인터페이스 선언
     public interface OnItemClickListener {

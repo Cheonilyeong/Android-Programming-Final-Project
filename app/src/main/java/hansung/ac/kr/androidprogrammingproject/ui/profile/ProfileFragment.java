@@ -86,7 +86,7 @@ public class ProfileFragment extends Fragment {
             // 예: 화면에 사용자 정보를 표시
             Log.d("UserInfo", "Email: " + email + ", Nickname: " + nickname + ", Information: " + information + ", ImageUri: " + imageURL);
 
-            if(imageURL.equals("")) iv_profile.setImageResource(R.drawable.basicimage);
+            if(imageURL.equals("profile/NULL.jpg")) iv_profile.setImageResource(R.drawable.basicimage);
             else downloadImage(imageURL);
             tv_email.setText(email);
             tv_nickname.setText(nickname);

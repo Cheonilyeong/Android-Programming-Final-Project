@@ -92,7 +92,7 @@ public class ModificationActivity extends Activity {
         btn_basicImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                imageState = 3;
+                imageState = BASIC;
                 iv_profile.setImageResource(R.drawable.basicimage);
             }
         });
@@ -117,7 +117,6 @@ public class ModificationActivity extends Activity {
 
                 // 이미지 업로드
                 uploadImage();
-                save();
                 finish();
             }
         });
@@ -134,7 +133,7 @@ public class ModificationActivity extends Activity {
                 UserAccount userAccount = snapshot.getValue(UserAccount.class);
                 imageURL = userAccount.getImageURL();
                 Log.d("imageURL", imageURL);
-                if(!imageURL.equals("")) downloadImage(imageURL);
+                if(!imageURL.equals("profile/NULL.jpg")) downloadImage(imageURL);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -143,42 +142,46 @@ public class ModificationActivity extends Activity {
 
     // 이미지 업로드 (스토리지에서 고르기)
     private void uploadImage() {
-        if(imageState == STAY) return;
-        if(imageState == BASIC) return;
+        if(imageState == STAY || imageState == BASIC) {
+            save();
+        }
+        else {
+            // Storage 참조 생성
+            storage = FirebaseStorage.getInstance();
+            storageRef = storage.getReference().child("profile/" + LoginActivity.u_id + ".jpg");
 
-        // Storage 참조 생성
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference().child("profile/" + LoginActivity.u_id + ".jpg");
+            try {
+                // 파일이 존재하는지 확인하기 위해 InputStream 열기
+                InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                if (inputStream != null) {
+                    inputStream.close();
 
-        try {
-            // 파일이 존재하는지 확인하기 위해 InputStream 열기
-            InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-            if (inputStream != null) {
-                inputStream.close();
-
-                // 업로드 작업 시작
-                storageRef.putFile(selectedImageUri)
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // 업로드 성공 시
-                                // Log.d("putFile", "Upload Success: ");
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // 업로드 실패 시
-                                Log.d("putFile", "Upload Failed: " + e.getMessage());
-                            }
-                        });
-            } else {
-                throw new FileNotFoundException("Selected image file not found.");
+                    // 업로드 작업 시작
+                    storageRef.putFile(selectedImageUri)
+                            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    // 업로드 성공 시
+                                    Log.d("putFile", "Upload Success: ");
+                                    save();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // 업로드 실패 시
+                                    Log.d("putFile", "Upload Failed: " + e.getMessage());
+                                    save();
+                                }
+                            });
+                } else {
+                    throw new FileNotFoundException("Selected image file not found.");
+                }
+            } catch (FileNotFoundException e) {
+                Log.e("uploadImage", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.e("uploadImage", "Error closing InputStream: " + e.getMessage());
             }
-        } catch (FileNotFoundException e) {
-            Log.e("uploadImage", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-            Log.e("uploadImage", "Error closing InputStream: " + e.getMessage());
         }
     }
 
@@ -204,7 +207,7 @@ public class ModificationActivity extends Activity {
                         account.setNickName(et_nickname.getText().toString());
                         account.setInformation(et_information.getText().toString());
                         if(imageState == MODIFIED) account.setImageURL("/profile/" + LoginActivity.u_id + ".jpg");
-                        if(imageState == BASIC) account.setImageURL("");
+                        if(imageState == BASIC) account.setImageURL("profile/NULL.jpg");
                         // 다시 저장
                         databaseRef.child(currentUserId).setValue(account);
                     }
