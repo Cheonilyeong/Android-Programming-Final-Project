@@ -38,14 +38,27 @@
 <br/>
 
 ### 3. 프로젝트 결과물
-| 회원가입 | 로그인 |
-| --- | --- |
-|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/097960cc-fff4-48b9-af38-a455bd4c1ebd"> | <img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/985967b6-ccc6-47d9-8fa2-4da9976a7561"> |
-
-| 게시물 | 채팅방 입장 | 채팅방 나가기 |
+| 회원가입 | 로그인 | 프로필 수정 |
 | --- | --- | --- |
-| |<img src="https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/6b037056-ed57-4976-85a3-12a019f73a59"| | 
+|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/097960cc-fff4-48b9-af38-a455bd4c1ebd"> | <img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/985967b6-ccc6-47d9-8fa2-4da9976a7561">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/94a9c64b-7fc1-4442-abe5-45770e37da7e">|
 
+<br/>
+
+| 게시물 올리기 | 게시물 편집 | 게시물 삭제 |
+| --- | --- | --- |
+|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/175ebdeb-f217-4835-a1ae-8e53121f5015">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/bd13dc3a-d0c9-44d9-87cb-8aecbadf9b70">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/a7189b46-d8ae-4b15-9ff2-96fd8037f1e4">| 
+
+<br/>
+
+| 채팅방 입장 | 채팅방 | 채팅방 나가기 |
+| --- | --- | --- |
+|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/6b037056-ed57-4976-85a3-12a019f73a59">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/3b87528a-0a56-4b05-9827-e369feda7240">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/2722ea65-5faf-437f-b9cb-7b31c5d4a5ae">|
+
+<br/>
+
+| 나의 게시물 | 학식 메뉴 |
+| --- | --- |
+|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/ad2b14d6-bcea-49fb-bb15-b17e2b8cf54e">|<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/81afa0e5-604a-4e63-b5b7-b6454347d718">|
 
 <br/>
 
