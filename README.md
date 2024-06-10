@@ -42,6 +42,10 @@
 | --- | --- |
 |<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/097960cc-fff4-48b9-af38-a455bd4c1ebd"> | <img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/985967b6-ccc6-47d9-8fa2-4da9976a7561"> |
 
+| 게시물 | 채팅방 입장 | 채팅방 나가기 |
+| --- | --- | --- |
+| |<img src="https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/6b037056-ed57-4976-85a3-12a019f73a59"| | 
+
 
 <br/>
 
