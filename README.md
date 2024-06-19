@@ -21,14 +21,9 @@
 <br/>
 
 ### 2. 프로젝트 개요
-#### 2.1 프로젝트 설명
-*
-*
-*
-*
-#### 2.2 프로젝트 구조
-*
-*
+#### 2.1 프로젝트 전체적인 구조
+<img src = "https://github.com/Cheonilyeong/Finding-foodmate/assets/147039081/53b241a6-2fcf-4be2-8e9e-5d3a00919c8f">
+
 #### 2.3 프로젝트에 사용된 기능
 * Recycler view
 * View model
