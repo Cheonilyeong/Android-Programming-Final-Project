@@ -62,5 +62,5 @@
 
 <br/>
 
-[![Video Label](http://img.youtube.com/vi/AnTPpGedE/0.jpg)](https://youtu.be/AnTPpGedE)
+[![Video Label](http://img.youtube.com/vi/7-AnTPpGedE/0.jpg)](https://youtu.be/7-AnTPpGedE)
 
